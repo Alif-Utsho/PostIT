@@ -62,7 +62,7 @@ class Newsfeed extends Component {
             <div>
                 <Navbar />
                 <div className="container col-lg-9">
-                    <div className="row">
+                    <div className="d-flex justify-content-center mt-4">
 
                         <div className="col-lg-7 col-12 overflow-auto" style={{ maxHeight: '630px' }}>
 
@@ -70,10 +70,10 @@ class Newsfeed extends Component {
                                 posts ?
                                     posts.length > 0 ?
                                         posts
-                                            .filter(post=> friendList.includes(post.user.id))
+                                            .filter(post => friendList.includes(post.user.id))
                                             .map(post => {
                                                 return <Post post={post} user={post.user} reload={this.reload.bind(this)} key={post.id} />
-                                        }) :
+                                            }) :
                                         <div className="d-flex justify-content-center mt-5 py-4 alert alert-danger">
                                             <h3>No post yet</h3>
                                         </div>
@@ -88,26 +88,27 @@ class Newsfeed extends Component {
 
                         </div>
                         <div className="vr mx-auto d-none px-0 d-lg-block my-4"></div>
-                        <div className="col-4 bg-white d-none d-lg-block border-top border-primary rounded border-3 my-4 ">
 
-                            <div className="mt-2">
-                                <div className="fs-6 border-bottom mb-4 d-flex my-auto card-header rounded-top">
-                                    Friend Requests
-                                    <span className="ms-auto fs-6">{request && request.length}</span>
-                                </div>
-                                {
-                                    request &&
-                                    <ul className="list-group list-group-flush" style={{ height: '475px' }}>
-                                        {
-                                            request.length > 0 ?
-                                                request.map(req => <Request request={req} key={req.id} reload={this.reload.bind(this)} />) :
-                                                <span className="text-center mt-5 p-5 alert alert-danger">No friend requests</span>
-                                        }
-                                    </ul>
-                                }
-                                <button className="btn btn-outline-secondary col-12 m-1" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasRight" aria-controls="offcanvasRight">View Sent requests</button>
+                        <div className="col-4 bg-white d-none d-lg-block border-top border-primary rounded border-2">
+                            <div className="fs-6 border-bottom mb-4 d-flex my-auto card-header rounded-top">
+                                Friend Requests
+                                <span className="ms-auto fs-6">{request && request.length}</span>
+                            </div>
+                            {
+                                request &&
+                                <ul className="list-group list-group-flush px-1" style={{ height: '475px' }}>
+                                    {
+                                        request.length > 0 ?
+                                            request.map(req => <Request request={req} key={req.id} reload={this.reload.bind(this)} />) :
+                                            <span className="text-center mt-5 p-5 alert alert-danger">No friend requests</span>
+                                    }
+                                </ul>
+                            }
+                            <button className="btn btn-outline-secondary col-12 mx-auto m-1" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasRight" aria-controls="offcanvasRight">View Sent requests</button>
+                            <Sent sent={sent} reload={this.reload.bind(this)} />
+                        </div>
 
-                                {/* <div className="offcanvas offcanvas-end" tabIndex="-1" id="offcanvasRight" aria-labelledby="offcanvasRightLabel">
+                        {/* <div className="offcanvas offcanvas-end" tabIndex="-1" id="offcanvasRight" aria-labelledby="offcanvasRightLabel">
 
                                     <div className="offcanvas-header">
                                         <h5 id="offcanvasRightLabel">Request sent</h5>
@@ -119,10 +120,7 @@ class Newsfeed extends Component {
                                     </ul>
                                 </div> */}
 
-                                {/* Requests sent offcanvas */}
-                                <Sent sent={sent} reload={this.reload.bind(this)} />
-                            </div>
-                        </div>
+                        {/* Requests sent offcanvas */}
                     </div>
 
 

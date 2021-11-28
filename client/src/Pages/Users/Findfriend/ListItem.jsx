@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import { Link } from 'react-router-dom';
 import AddBtn from '../../../Components/ConButtons/AddBtn';
+import CancelBtn from '../../../Components/ConButtons/CancelBtn';
 import ConfirmBtn from '../../../Components/ConButtons/ConfirmBtn';
 
 export default class Listitem extends Component {
@@ -56,13 +57,7 @@ export default class Listitem extends Component {
                     {
                         Object.values(receiver).includes(user.id) &&
                         <span className="my-auto">
-                            <button
-                                className="btn btn-outline-success btn-sm"
-                                disabled={true}
-                            >
-                                <i className="fas fa-user-plus me-1"></i>
-                                Request sent
-                            </button>
+                            <CancelBtn req_id={Object.keys(receiver).find(key => receiver[key] === user.id)} reload={this.props.reload} />
                         </span>
                     }
 

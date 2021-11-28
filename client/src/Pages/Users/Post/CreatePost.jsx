@@ -6,6 +6,7 @@ export default class CreatePost extends Component {
     state = {
         newPost: ''
     }
+    
 
     onchangeHandler = e => {
         this.setState({
@@ -26,6 +27,7 @@ export default class CreatePost extends Component {
         
     }
     render() {
+        
         return (
             <div>
                 

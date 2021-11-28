@@ -16,14 +16,21 @@ export default class Profile extends Component {
         // request
         // sent
         // friends
-        reload: false
+        reload: false,
+        authId: 2
     }
 
     componentDidMount() {
         this.fetchData()
+        
     }
 
     componentDidUpdate(prevProps, prevState) {
+        if (this.state.user) {
+            if (this.state.authId === this.state.user.id) {
+                window.location.pathname = "/profile"
+            }
+        }
         if (this.state.reload) {
             this.fetchData()
             this.setState({ reload: false })
@@ -34,9 +41,9 @@ export default class Profile extends Component {
         axios.get(`/api/profile/${this.props.id}`)
             .then(res => this.setState({ ...res.data }))
             .catch(e => console.log(e))
-        axios.get('/api/connection')
-            .then(res => this.setState({ ...res.data }))
-            .catch(e => console.log(e))
+        // axios.get('/api/connection')
+        //     .then(res => this.setState({ ...res.data }))
+        //     .catch(e => console.log(e))
     }
 
     reload() {
@@ -44,8 +51,7 @@ export default class Profile extends Component {
     }
 
     render() {
-        const { user, request, sent, friends } = this.state
-        const authId = 2
+        const { user, authId } = this.state
         return (
             <div>
                 <Navbar reload={this.reload.bind(this)} />
@@ -58,13 +64,13 @@ export default class Profile extends Component {
                                 <div className="col-md-8 shadow-sm col-12 mt-3 bg-white p-3 border-primary border-3 border-top rounded-top">
                                     <div className="d-md-flex">
                                         <i className="fas fa-user fs-1 me-2 mb-md-0 mb-2 fs-5 me-md-3 my-auto alert p-md-5 rounded-circle alert-success"></i>
-                                        <div className="my-auto">
+                                        <div className="my-auto col-md-6">
                                             <h3 className="fw-bold">{user.name}</h3>
                                             <h5 className="fs-5 text-muted">{user.profile && user.profile.bio ? user.profile.bio : user.phone}</h5>
                                             <p className="text-dark">E-mail: {user.email}</p>
                                         </div>
                                         <div className="ms-auto">
-                                            <div className="d-flex justify-content-center">
+                                            <div className="d-flex justify-content-md-end justify-content-center">
                                                 {
                                                     user.profile && user.profile.fb &&
                                                     <div className="fs-2 d-flex mx-2">
@@ -112,6 +118,9 @@ export default class Profile extends Component {
                                                             else if (req.sender === authId && req.status === 'friend') {
                                                                 return <UnfriendBtn req_id={req.id} reload={this.reload.bind(this)} key={req.id} />
                                                             }
+                                                            else if (req.sender !== authId && req.status !== 'friend' && req.status !== 'follower') {
+                                                                return <AddBtn user_id={user.id} reload={this.reload.bind(this)} />
+                                                            }
                                                             else return null
                                                         })
                                                     }
@@ -119,27 +128,37 @@ export default class Profile extends Component {
                                                         user.sent && user.sent.map(s => {
                                                             if (s.receiver === authId && s.status === 'follower') {
                                                                 return <div className="d-flex">
-                                                                    <div className="me-1">
-                                                                        <CancelBtn req_id={s.id} reload={this.reload.bind(this)} key={s.id} />
-                                                                    </div>
                                                                     <ConfirmBtn req_id={s.id} reload={this.reload.bind(this)} key={s.id} />
                                                                 </div>
                                                             }
                                                             else if (s.receiver === authId && s.status === 'friend') {
                                                                 return <UnfriendBtn req_id={s.id} reload={this.reload.bind(this)} key={s.id} />
                                                             }
+                                                            else if (s.receiver !== authId && s.status !== 'friend' && s.status !== 'follower') {
+                                                                return <AddBtn user_id={user.id} reload={this.reload.bind(this)} key={user.id} />
+                                                            }
                                                             else return null
                                                         })
                                                     }
+
                                                     {
-                                                        user.sent && user.sent.find(s => s.receiver !== authId) && <AddBtn user_id={user.id} reload={this.reload.bind(this)} />
+                                                        user.sent.length === 0 && user.request.length === 0 && <AddBtn user_id={user.id} reload={this.reload.bind(this)} key={user.id} />
+                                                    }
+                                                    {/* {
+                                                        user.sent && user.sent.find(s => s.receiver !== authId && s.status!=='friend') && <AddBtn user_id={user.id} reload={this.reload.bind(this)} />
                                                     }
                                                     {
-                                                        user.request && user.request.find(req => req.sender !== authId) && <AddBtn user_id={user.id} reload={this.reload.bind(this)} />
+                                                        user.request && user.request.find(req => req.sender !== authId && req.status!=='friend') && <AddBtn user_id={user.id} reload={this.reload.bind(this)} />
                                                     }
                                                     {
                                                         !user.sent && !user.receiver && <AddBtn user_id={user.id} reload={this.reload.bind(this)} />
-                                                    }
+                                                    } */}
+
+                                                    {/* {
+                                                        (!(user.request.find(req => req.sender === authId && req.status !== 'friend')) ||
+                                                        !(user.sent.find(s => s.status !== 'friend' && s.receiver !== authId))) &&
+                                                        <AddBtn user_id={user.id} reload={this.reload.bind(this)} />
+                                                    } */}
 
                                                 </div>
                                             </div>
@@ -152,7 +171,7 @@ export default class Profile extends Component {
                                             <div className="d-flex justify-content-between">
                                                 <i className="fas fa-user-friends mt-auto display-6 text-muted d-none d-md-flex"></i>
                                                 <div className="text-center">
-                                                    <h3><b>{friends && friends.length}</b></h3>
+                                                    <h3><b>{user.sent.filter(s => s.status === 'friend').length + user.request.filter(req => req.status === 'friend').length}</b></h3>
                                                     <h6 className="text-muted">Friends</h6>
                                                 </div>
                                             </div>
@@ -162,7 +181,7 @@ export default class Profile extends Component {
                                             <div className="d-flex justify-content-between">
                                                 <i className="fas fa-user-minus mt-auto display-6 text-muted d-none d-md-flex"></i>
                                                 <div className="text-center">
-                                                    <h3><b>{sent && sent.length}</b></h3>
+                                                    <h3><b>{user.sent && user.sent.filter(s => s.status !== 'friend').length}</b></h3>
                                                     <h6 className="text-muted">Following</h6>
                                                 </div>
                                             </div>
@@ -172,7 +191,7 @@ export default class Profile extends Component {
                                             <div className="d-flex justify-content-between">
                                                 <i className="fas fa-user-plus mt-auto display-6 text-muted d-none d-md-flex"></i>
                                                 <div className="text-center">
-                                                    <h3><b>{request && request.length}</b></h3>
+                                                    <h3><b>{user.request && user.request.filter(req => req.status !== 'friend').length}</b></h3>
                                                     <h6 className="text-muted">Follower</h6>
                                                 </div>
                                             </div>
@@ -183,23 +202,28 @@ export default class Profile extends Component {
                                 </div>
                             </div>
                             <div className="col-12 col-lg-8 mx-auto mt-4">
-                                <div className="card-header fs-4 border-0 d-flex">Posts <span className="ms-auto">{user.posts && user.posts.length}</span></div>
+                                <div className="card-header fs-4 border-0 d-flex">Posts <span className="ms-auto">{user.posts.length}</span></div>
                                 {
-                                    user.posts ?
-                                        user.posts.length > 0 ?
-                                            user.posts.reverse().map(post => {
-                                                return (
-                                                    <Post post={post} user={user} key={post.id} reload={this.reload.bind(this)} />
-                                                )
-                                            }) :
-                                            <div className="d-flex justify-content-center mt-5 py-4 alert alert-danger">
-                                                <h3>No post yet</h3>
-                                            </div>
-                                        :
-                                        <div className="d-flex justify-content-center mt-5 py-3">
-                                            <div className="spinner-border text-primary" role="status">
-                                                <span className="sr-only"></span>
-                                            </div>
+                                    user.request.filter(req => req.sender === authId && req.status === 'friend').length > 0 ||
+                                        user.sent.filter(s => s.status === 'friend' && s.receiver === authId).length > 0 ?
+                                        user.posts ?
+                                            user.posts.length > 0 ?
+                                                user.posts.reverse().map(post => {
+                                                    return (
+                                                        <Post post={post} user={user} key={post.id} reload={this.reload.bind(this)} />
+                                                    )
+                                                }) :
+                                                <div className="d-flex justify-content-center mt-5 py-4 alert alert-danger">
+                                                    <h3>No post yet</h3>
+                                                </div>
+                                            :
+                                            <div className="d-flex justify-content-center mt-5 py-3">
+                                                <div className="spinner-border text-primary" role="status">
+                                                    <span className="sr-only"></span>
+                                                </div>
+                                            </div> :
+                                        <div className="d-flex justify-content-center mt-5 py-4 alert alert-danger">
+                                            <h3>Make friend to see posts</h3>
                                         </div>
 
                                 }

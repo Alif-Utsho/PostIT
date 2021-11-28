@@ -9,6 +9,7 @@ import Findfriend from './Pages/Users/Findfriend/Findfriend'
 import Friend from './Pages/Users/Newsfeed/Connection/Friend'
 import AuthProfile from './Pages/Users/Profile/AuthProfile'
 import ProfileID from './Pages/Users/Profile/ProfileID'
+import SinglePostID from './Pages/Users/Post/SinglePostID'
 // import AuthProfileFunction from './Pages/Users/Profile/AuthProfileFunction'
 
 
@@ -31,8 +32,11 @@ function Router() {
                 <Route exact path='/profile' element={<AuthProfile />} />
                 <Route path="/profile/:id" element={<ProfileID />} />
 
+                {/* Post */}
+                <Route path='/posts/:id' element={<SinglePostID />} />
+
                 {/* <Route exact path='/profilefunction' element={<AuthProfileFunction/>} /> */}
-                
+
 
             </Routes>
         </BrowserRouter>

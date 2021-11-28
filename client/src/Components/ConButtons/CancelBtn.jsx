@@ -26,8 +26,8 @@ export default class CancelBtn extends Component {
                     className="btn btn-secondary btn-sm"
                     onClick={() => this.cancelRequest(this.props.req_id)}
                 >
-                    <i className="fas fa-user-minus me-1"></i>
-                    {this.state.canceled ? 'Cancelled' : 'Cancel request'}
+                    <i className="fas fa-user-times me-1"></i>
+                    {this.state.canceled ? 'Cancelled' : 'Cancel'}
                 </button>
             </div>
         )

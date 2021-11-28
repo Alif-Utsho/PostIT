@@ -42,7 +42,7 @@ export default class EditPost extends Component {
                     <Modal.Body>
                         <div className=" mb-2">
                             <div className="form-group">
-                                <textarea name="editPost" onChange={this.onchangeHandler} value={this.state.editPost} className="form-control" id="exampleFormControlTextarea1" rows="3" placeholder="Write down your thoughts here and share with friends" style={{ resize: 'none' }}></textarea>
+                                <textarea name="editPost" onChange={this.onchangeHandler} value={this.state.editPost} className="form-control" id="exampleFormControlTextarea1" rows="3" placeholder="Write down your thoughts here and share with friends"></textarea>
                             </div>
 
                             <div className={this.state.editPost.trim() !== this.props.post.desc && this.state.editPost.trim().length > 0 ? "d-flex" : "d-flex d-none"}>

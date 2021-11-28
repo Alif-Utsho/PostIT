@@ -9,9 +9,9 @@ export default class Findfriend extends Component {
     state = {
         clicked: false,
         users: [],
-        filters: [],
         req_sent: false,
-        reload: false
+        reload: false,
+        search: ''
     }
 
 
@@ -42,15 +42,10 @@ export default class Findfriend extends Component {
 
 
     searchHandle = e => {
-        this.reload()
-        const search = e.target.value
-        search.length > 0 ? this.setState({
+        const searchtext = e.target.value
+        searchtext.length > 0 ? this.setState({
             clicked: true,
-            filters: this.state.users.filter(user =>
-                user.name
-                    .toLowerCase()
-                    .includes(search.toLowerCase())
-            )
+            search: searchtext
         }) :
             this.setState({
                 clicked: false,
@@ -62,7 +57,7 @@ export default class Findfriend extends Component {
 
 
     render() {
-        const { filters, clicked } = this.state
+        const { clicked } = this.state
         return (
             <div className="vh-100">
                 <Navbar reload={this.reload.bind(this)} />
@@ -79,17 +74,21 @@ export default class Findfriend extends Component {
 
                             {
                                 clicked ?
-                                    ((clicked && filters.length > 0) ?
-                                        filters.map(user => {
-                                            return (
-                                                <ListItem
-                                                    key={user.id}
-                                                    user={user}
-                                                    reload={this.reload.bind(this)}
-                                                />
-                                            )
-                                        }) :
-                                        <h1 className="alert alert-danger text-center">No user found</h1>) :
+                                    // ((clicked && filters.length > 0) ?
+                                    this.state.users.filter(user =>
+                                        user.name
+                                            .toLowerCase()
+                                            .includes(this.state.search.toLowerCase())
+                                    ).map(user => {
+                                        return (
+                                            <ListItem
+                                                key={user.id}
+                                                user={user}
+                                                reload={this.reload.bind(this)}
+                                            />
+                                        )
+                                    }) :
+                                    // <h1 className="alert alert-danger text-center">No user found</h1>) :
                                     <h1 className="alert alert-success text-center">Search your friends</h1>
                             }
 

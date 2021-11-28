@@ -15,6 +15,7 @@ class UserController extends Controller
     public function singleUser(Request $req){
         $user = User::where('id', $req->id)
                 ->with('profile')
+                ->with('friends')
                 ->with('request')
                 ->with('sent')
                 ->with('posts')

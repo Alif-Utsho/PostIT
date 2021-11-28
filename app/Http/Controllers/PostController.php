@@ -21,6 +21,16 @@ class PostController extends Controller
 
     }
 
+    public function singlePost(Request $req){
+        $post = Post::where('id', $req->id)
+            ->with('user')
+            ->with('reacts')
+            ->first();
+        return response()->json([
+            'post'=>$post
+        ]);
+    }
+
     public function createPost(Request $req){
 
         $var = new Post();

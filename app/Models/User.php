@@ -19,12 +19,25 @@ class User extends Model
     }
 
     public function request(){
-        return $this->hasMany(Connection::class, 'receiver');
+        return $this->hasMany(Connection::class, 'receiver'); //->where('status', 'follower');
     }
 
     public function sent(){
-        return $this->hasMany(Connection::class, 'sender');
+        return $this->hasMany(Connection::class, 'sender'); //->where('status', 'follower');
     }
+
+    public function friends(){
+        return $this->hasMany(Connection::class, 'receiver')->where('status', 'friend'); // ->hasMany(Connection::class, 'sender')->where('status', 'friend');
+    }
+
+    // public function send_friends(){
+    //     return $this->hasMany(Connection::class, 'sender')->where('status', 'friend');
+    // }
+
+    // public function friends(){
+    //     return $this->rec_friends->merge($this->send_friends);
+    // }
+
 
     public function posts(){
         return $this->hasMany(Post::class);

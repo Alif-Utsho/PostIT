@@ -35,7 +35,7 @@ class ReactController extends Controller
     }
 
     public function reacts(Request $req){
-        $reacts = React::where('post_id', $req->post_id)->get();
+        $reacts = React::where('post_id', $req->post_id)->with('user')->get();
 
         return response()->json([
             'reacts' => $reacts

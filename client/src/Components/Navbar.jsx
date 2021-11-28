@@ -39,17 +39,17 @@ export default class Navbar extends Component {
                         <div className="collapse navbar-collapse" id="navbarSupportedContent">
                             <ul className="navbar-nav mb-2 mb-lg-0 ms-auto">
                                 <li className="nav-item">
-                                    <Link className="nav-link active" aria-current="page" to="/newsfeed"><i className="fas fa-home fs-5 px-2"><span className="d-lg-none ms-2 fw-normal">Newsfeed</span></i></Link>
+                                    <Link className="nav-link active" aria-current="page" to="/newsfeed"><i className="fas fa-home fs-5 px-2"></i> <span className="d-lg-none ms-2 fw-normal">Newsfeed</span></Link>
                                 </li>
                                 <li className="nav-item">
-                                    <button className="nav-link border-0 active bg-transparent" onClick={this.handleShow} ><i className="far fa-plus-square fs-5 px-2 ps-lg-5"><span className="d-lg-none ms-2">Create post</span></i></button>
+                                    <button className="nav-link border-0 active bg-transparent" onClick={this.handleShow} ><i className="far fa-plus-square fs-5 px-2 ps-lg-5"></i> <span className="d-lg-none ms-2">Create post</span></button>
                                 </li>
                                 <li className="nav-item">
-                                    <Link className="nav-link active" to="#"><i className="far fa-bell fs-5 px-2 ps-lg-5"><span className="d-lg-none ms-2">Activity</span></i></Link>
+                                    <Link className="nav-link border-0 active bg-transparent" to="/friend"><i className="fas fa-user-friends fs-5 px-2 ps-lg-5"></i> <span className="d-lg-none ms-2">Friends</span> </Link>
                                 </li>
 
                                 <li className="nav-item">
-                                    <Link className="nav-link active" to="/findfriend"><i className="fas fa-search fs-5 px-2 ps-lg-5"><span className="d-lg-none ms-2 fw-normal">Search </span></i></Link>
+                                    <Link className="nav-link active" to="/findfriend"><i className="fas fa-search fs-5 px-2 ps-lg-5"></i> <span className="d-lg-none ms-2 fw-normal">Search </span></Link>
                                 </li>
 
                             </ul>
@@ -63,10 +63,9 @@ export default class Navbar extends Component {
                                     <ul className="dropdown-menu shadow" aria-labelledby="navbarDropdown">
                                         <li><Link className="dropdown-item" to="/profile"><i className="fas fa-address-card me-2"></i>Profile</Link></li>
                                         <li><Link className="dropdown-item" to="/friend"><i className="fas fa-user-friends me-2"></i>Friends</Link></li>
-                                        <li><button className="dropdown-item"><i className="fas fa-user-friends me-2" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasRight" aria-controls="offcanvasRight"></i>Sent Requests</button></li>
-                                        <li><Link className="dropdown-item" to="#"><i className="fas fa-user-lock me-2 text-danger"></i>Block list</Link></li>
+                                        {/* <li><Link className="dropdown-item" to="#"><i className="fas fa-user-lock me-2 text-danger"></i>Block list</Link></li> */}
                                         <li><hr className="dropdown-divider" /></li>
-                                        <li><button className="dropdown-item" onClick={this.signout}><i className="fas fa-sign-out-alt me-2"></i>Logout</button></li>
+                                        <li><button className="dropdown-item" onClick={this.signout}><i className="fas fa-sign-out-alt text-danger me-2"></i>Logout</button></li>
                                     </ul>
                                 </div>
                             </ul>

@@ -12,4 +12,10 @@ class Post extends Model
     public function user(){
         return $this->belongsTo(User::class);
     }
+    public function reacts(){
+        return $this->hasMany(React::class);
+    }
+    // public function reacts(){
+    //     return $this->hasMany(React::class, 'user_id');
+    // }
 }

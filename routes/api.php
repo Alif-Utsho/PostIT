@@ -36,6 +36,8 @@ Route::get('/posts', [PostController::class, 'posts']);
 Route::post('/createpost', [PostController::class, 'createPost']);
 Route::put('/deletepost', [PostController::class, 'deletePost']);
 Route::put('/editpost', [PostController::class, 'editPost']);
+Route::get('/post/{id}', [PostController::class, 'singlePost']);
+
 
 // Connection routes
 Route::get('/users', [ConnectionController::class, 'users']);

@@ -15,13 +15,13 @@ class CreateProfilesTable extends Migration
     {
         Schema::create('profiles', function (Blueprint $table) {
             $table->id()->autoIncrement();
-            $table->integer('user_id');
-            $table->string('bio');
-            $table->string('dp');
-            $table->string('fb');
-            $table->string('instagram');
-            $table->string('linkedin');
-            $table->string('github');
+            $table->integer('user_id')->nullable();
+            $table->string('bio')->nullable();
+            $table->string('dp')->nullable();
+            $table->string('fb')->nullable();
+            $table->string('instagram')->nullable();
+            $table->string('linkedin')->nullable();
+            $table->string('github')->nullable();
             $table->timestamps();
         });
     }

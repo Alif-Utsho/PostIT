@@ -68,7 +68,6 @@ export default class AuthProfile extends Component {
         axios.put('/api/editprofile', profile)
             .then(res => {
                 // profile.preventDefault()
-                console.log(profile)
                 // window.location.reload()
                 this.reload()
             })
@@ -76,7 +75,6 @@ export default class AuthProfile extends Component {
     }
 
     reload() {
-        console.log('reloaded')
         this.setState({ reload: true })
     }
 
@@ -96,7 +94,7 @@ export default class AuthProfile extends Component {
                                     <i className="fas fa-user fs-3 fs-5 my-auto alert p-4 mb-4 rounded-circle alert-success"></i>
                                     <div className="my-auto">
                                         <h2 className="display-6 fw-bold">{user.name}</h2>
-                                        <h5 className="fs-5 text-muted">{user.profile && user.profile.bio ? user.profile.bio : user.phone}</h5>
+                                        <h5 className="fs-5 text-muted overflow-auto">{user.profile && user.profile.bio ? user.profile.bio : user.phone}</h5>
                                         <p className="text-dark">E-mail: {user.email}</p>
                                     </div>
                                     <div className="d-flex px-3 my-4 justify-content-between">
