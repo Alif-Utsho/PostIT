@@ -29,7 +29,7 @@ export default class Post extends Component {
         axios.get(`/api/reacts/${this.props.post.id}`)
             .then(res => {
                 this.setState({ ...res.data })
-                res.data.reacts.filter(react => react.user_id === 2).length > 0 &&
+                res.data.reacts.filter(react => react.user_id === this.state.authId).length > 0 &&
                     this.setState({ liked: true })
             })
             .catch(e => console.log(e))
@@ -38,12 +38,12 @@ export default class Post extends Component {
     likeClick = e => {
         
         !this.state.liked ? (
-            axios.post('/api/like', { post_id: this.props.post.id, user_id: 2 })
+            axios.post('/api/like', { post_id: this.props.post.id })
                 .then(res => this.reload())
                 .catch(e => console.log(e))
         ) : (
 
-            axios.put('/api/unlike', { post_id: this.props.post.id, user_id: 2 })
+            axios.put('/api/unlike', { post_id: this.props.post.id })
                 .then(res => this.reload())
                 .catch(e => console.log(e))
         )
@@ -93,7 +93,8 @@ export default class Post extends Component {
 
     render() {
         const { post, user } = this.props
-        const { reacts } = this.state
+        const { reacts, authId } = this.state
+
         const d = new Date()
         const month = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
 
@@ -149,7 +150,7 @@ export default class Post extends Component {
                             <button className="bg-transparent border-0" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false"><i className="fas fa-ellipsis-h text-secondary"></i></button>
                             <ul className="dropdown-menu" aria-labelledby="dropdownMenuButton1">
                                 {
-                                    user.id === 2 ?
+                                    (user.id === authId) ?
                                         <div>
                                             <li><button className="dropdown-item" onClick={this.editClick}><i className="fas fa-pen"></i>  Edit post</button></li>
 
@@ -172,10 +173,10 @@ export default class Post extends Component {
                         </span>
                     </p>
                     <hr className="col-12 mb-1" />
-                    <div className="d-flex col-12">
-                        <div className={this.state.liked ? "btn btn-sm col-4 text-danger fw-bold" : "btn btn-sm col-4"} onClick={this.likeClick}><i className={this.state.liked ? "fas fa-heart me-1" : "far fa-heart me-1"} ></i>Love</div>
-                        <div className="btn btn-sm col-4"><i className="far fa-comment me-1"></i>Comment</div>
-                        <div className="btn btn-sm col-4"><i className="far fa-share-square me-1"></i>Share</div>
+                    <div className="d-flex col-md-10 mx-auto justify-content-between">
+                        <div className={this.state.liked ? "btn btn-sm text-danger fw-bold" : "btn btn-sm"} onClick={this.likeClick}><i className={this.state.liked ? "fas fa-heart me-1" : "far fa-heart me-1"} ></i>Love</div>
+                        <div className="btn btn-sm"><i className="far fa-comment me-1"></i>Comment</div>
+                        <div className="btn btn-sm"><i className="far fa-share-square me-1"></i>Share</div>
                     </div>
                 </div>
 

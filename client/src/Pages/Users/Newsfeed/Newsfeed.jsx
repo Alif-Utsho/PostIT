@@ -12,6 +12,10 @@ class Newsfeed extends Component {
     }
 
     componentDidMount() {
+        let token = localStorage.getItem('token')
+        if (!token) {
+            window.location.pathname = "/login"
+        }
         this.fetchData()
     }
 
@@ -51,11 +55,11 @@ class Newsfeed extends Component {
     // }
 
     render() {
-        const { posts, request, sent, friends } = this.state
+        const { posts, request, sent, friends, authId } = this.state
         const friendList = []
 
         friends && friends.map(friend => {
-            friend.sender.id === 2 ? friendList.push(friend.receiver.id) : friendList.push(friend.sender.id)
+            friend.sender.id === authId ? friendList.push(friend.receiver.id) : friendList.push(friend.sender.id)
             return null
         })
         return (

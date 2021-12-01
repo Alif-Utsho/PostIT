@@ -11,7 +11,8 @@ export default class Findfriend extends Component {
         users: [],
         req_sent: false,
         reload: false,
-        search: ''
+        search: '',
+        authId: ''
     }
 
 
@@ -85,6 +86,7 @@ export default class Findfriend extends Component {
                                                 key={user.id}
                                                 user={user}
                                                 reload={this.reload.bind(this)}
+                                                authId={this.state.authId}
                                             />
                                         )
                                     }) :

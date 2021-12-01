@@ -3,19 +3,24 @@ import { Link } from 'react-router-dom';
 import AddBtn from '../../../Components/ConButtons/AddBtn';
 import CancelBtn from '../../../Components/ConButtons/CancelBtn';
 import ConfirmBtn from '../../../Components/ConButtons/ConfirmBtn';
+import UnfriendBtn from '../../../Components/ConButtons/UnfriendBtn';
 
 export default class Listitem extends Component {
     state = {
+        authId: 2
     }
 
 
 
     render() {
-        const { user } = this.props
-        const receiver = {}
-        const sender = {}
-        const friends = []
-        if (user.id === 2) return null
+        const { user, authId } = this.props
+
+        let friends = [];
+        if (user && (user.send_byfriends || user.rec_byfriends)) {
+            friends = user.send_byfriends.concat(user.rec_byfriends)
+        }
+
+        if (user.id === authId) return null
         return (
             <div>
                 <li className="list-group-item d-flex justify-content-between border-start mb-2 border-primary border-0 border-2 rounded align-items-start">
@@ -27,20 +32,6 @@ export default class Listitem extends Component {
                         <span className="text-muted">{user.profile && user.profile.bio}</span>
                     </div>
 
-                    {
-                        user.request.map(r => {
-                            r.sender === 2 && r.status === 'follower' && (receiver[r.id] = r.receiver)
-                            r.status === 'friend' && friends.push(r.receiver)
-                            return null
-                        })
-                    }
-                    {
-                        user.sent.map(s => {
-                            s.receiver === 2 && s.status === 'follower' && (sender[s.id] = s.sender)
-                            s.status === 'friend' && friends.push(s.sender)
-                            return null
-                        })
-                    }
                     {/* <span className="my-auto">
                         <button
                             className="btn btn-primary"
@@ -54,29 +45,30 @@ export default class Listitem extends Component {
                         </button>
                     </span> */}
 
+
+                    {/*  */}
                     {
-                        Object.values(receiver).includes(user.id) &&
-                        <span className="my-auto">
-                            <CancelBtn req_id={Object.keys(receiver).find(key => receiver[key] === user.id)} reload={this.props.reload} />
-                        </span>
+                        user.sent.filter(send => send.receiver === authId).length > 0 &&
+                        <ConfirmBtn req_id={user.sent.find(send => send.receiver === authId).id} reload={this.props.reload} key={user.sent.find(send => send.receiver === authId).id} />
+
                     }
 
                     {
-                        Object.values(sender).includes(user.id) &&
-                        <span className="my-auto">
-                            <ConfirmBtn req_id={Object.keys(sender).find(key => sender[key] === user.id)} reload={this.props.reload} />
-                        </span>
+                        user.request.filter(req => req.sender === authId).length > 0 &&
+                        <CancelBtn req_id={user.request.find(req => req.sender === authId).id} reload={this.props.reload} key={user.request.find(req => req.sender === authId).id} />
                     }
 
                     {
-                        !Object.values(receiver).includes(user.id) && !Object.values(sender).includes(user.id) && !friends.includes(user.id) &&
-                        <span className="my-auto">
-                            <AddBtn user_id={user.id} reload={this.props.reload} />
-                        </span>
+                        friends.filter(frnd => frnd.sender === authId || frnd.receiver === authId).length > 0 &&
+                        <UnfriendBtn req_id={friends.find(frnd => frnd.sender === authId || frnd.receiver === authId).id} reload={this.props.reload} />
                     }
-
                     {
-                        friends.includes(user.id) && <p className="alert alert-primary py-1 my-auto">Your friend</p>
+                        (
+                            !(user.sent.filter(send => send.receiver === authId).length > 0) &&
+                            !(user.request.filter(req => req.sender === authId).length > 0) &&
+                            !(friends.filter(frnd => frnd.sender === authId || frnd.receiver === authId).length > 0)
+                        ) &&
+                        <AddBtn user_id={user.id} reload={this.props.reload} />
                     }
                 </li>
             </div>

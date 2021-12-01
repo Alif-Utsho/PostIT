@@ -18,6 +18,7 @@ class CreateTokensTable extends Migration
             $table->integer('user_id');
             $table->string('type');
             $table->string('token');
+            $table->boolean('expired')->default(false);
             $table->timestamps();
         });
     }

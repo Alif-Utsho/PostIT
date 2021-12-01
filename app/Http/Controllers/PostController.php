@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Models\User;
 use App\Models\Post;
 use App\Models\React;
+use App\Models\Token;
 
 
 class PostController extends Controller
@@ -33,8 +34,9 @@ class PostController extends Controller
 
     public function createPost(Request $req){
 
+        $token = Token::where('token', $req->header('token'))->where('expired', false)->first();
         $var = new Post();
-        $var->user_id = $req->user_id;
+        $var->user_id = $token->user_id;
         $var->desc = $req->desc;
         if($var->save()){
             return response()->json([

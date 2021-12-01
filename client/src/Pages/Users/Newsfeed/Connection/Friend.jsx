@@ -9,7 +9,8 @@ import Sent from './Sent'
 export default class Friend extends Component {
 
     state = {
-        reload: false
+        reload: false,
+        authId: ''
     }
 
     componentDidMount() {
@@ -33,7 +34,8 @@ export default class Friend extends Component {
         this.setState({ reload: true })
     }
     render() {
-        const { friends, request, sent } = this.state
+        const { friends, request, sent, authId } = this.state
+        console.log(this.state)
         return (
             <div>
                 <Navbar reload={this.reload.bind(this)} />
@@ -42,7 +44,7 @@ export default class Friend extends Component {
                     <div className="d-md-flex justify-content-center">
                         <div className="col-md-4">
                             <h5 className="card-header mx-auto mb-3 border-bottom d-flex border-0 border-primary">Friends <span className="ms-auto">{friends && friends.length}</span> </h5>
-                            <ul className="list-group px-3 list-group-flush">
+                            <ul className="list-group list-group-flush">
                                 {
                                     friends ?
                                         ((friends && friends.length > 0) ?
@@ -52,10 +54,11 @@ export default class Friend extends Component {
                                                         key={friend.id}
                                                         friend={friend}
                                                         reload={this.reload.bind(this)}
+                                                        authId={authId}
                                                     />
                                                 )
                                             }) :
-                                            <h1 className="alert alert-danger text-center col-0 col-md-6 mx-auto">You have no friends</h1>) :
+                                            <h3 className="alert alert-danger text-center col-10 col-md-10 mt-md-5 mx-auto">You have no friends</h3>) :
                                         <div className="d-flex justify-content-center mt-5 py-3">
                                             <div className="spinner-border text-primary" role="status">
                                                 <span className="sr-only"></span>

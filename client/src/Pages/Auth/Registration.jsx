@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import { Link } from 'react-router-dom'
 import axios from 'axios'
 
 class Registration extends Component {
@@ -6,11 +7,11 @@ class Registration extends Component {
     state = {
         name: '',
         email: '',
-        phone:'',
+        phone: '',
         password: '',
         errors: ''
     }
-    
+
     onChange = e => {
         this.setState({
             [e.target.name]: e.target.value
@@ -33,29 +34,29 @@ class Registration extends Component {
                                 <div className="card shadow-2-strong" style={{ borderRadius: "1rem" }}>
                                     <div className="card-body p-4 p-sm-5  text-center">
 
-                                        <a href="/" className="alert alert-danger col-12 btn fs-2 fw-bold">
-                                            <i className="fas fa-thumbs-up"></i>
-                                            Talkbuzz
-                                        </a>
+                                        <Link className="alert alert-danger col-12 btn fs-2 fw-bold" to="/" style={{ fontFamily: "Yeseva One" }}>
+                                            <i className="fas fa-link"></i>
+                                            PostIT!!
+                                        </Link>
 
                                         <h4 className="mt-5 mb-3">Sign up</h4>
 
                                         <form onSubmit={this.handleSubmit}>
 
                                             <div className="form-outline mb-4">
-                                                <input type="text" id="name" name="name" onChange={this.onChange} value={this.state.name} class="form-control form-control-lg" placeholder="Name" />
+                                                <input type="text" id="name" name="name" onChange={this.onChange} value={this.state.name} className="form-control form-control-lg" placeholder="Name" />
                                             </div>
 
                                             <div className="form-outline mb-4">
-                                                <input type="text" id="phone" name="phone" onChange={this.onChange} value={this.state.phone} class="form-control form-control-lg" placeholder="Phone" />
+                                                <input type="text" id="phone" name="phone" onChange={this.onChange} value={this.state.phone} className="form-control form-control-lg" placeholder="Phone" />
                                             </div>
 
                                             <div className="form-outline mb-4">
-                                                <input type="text" id="email" name="email" onChange={this.onChange} value={this.state.email} class="form-control form-control-lg" placeholder="E-mail" />
+                                                <input type="text" id="email" name="email" onChange={this.onChange} value={this.state.email} className="form-control form-control-lg" placeholder="E-mail" />
                                             </div>
 
                                             <div className="form-outline mb-4">
-                                                <input type="password" id="password" name="password" onChange={this.onChange} value={this.state.password} class="form-control form-control-lg" placeholder="Password" />
+                                                <input type="password" id="password" name="password" onChange={this.onChange} value={this.state.password} className="form-control form-control-lg" placeholder="Password" />
                                             </div>
 
 

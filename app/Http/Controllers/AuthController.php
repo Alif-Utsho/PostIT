@@ -4,8 +4,10 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Str;
 
 use App\Models\User;
+use App\Models\Token;
 
 class AuthController extends Controller
 {
@@ -18,27 +20,29 @@ class AuthController extends Controller
 
         if($user){
             if(Hash::check($req->password, $user->password)){
-                // session()->put('user', $user);
-                session()->flush();
-                session(['username'=>$user->email]);
+
+                $token = new Token();
+                $token->user_id = $user->id;
+                $token->type = $user->type;
+                $token->token = Str::random(64);
+                $token->save();
+
                 return response()->json([
                     'status' => 200,
                     'user' => $user,
-                    'session' => session()->get('username')
-                ]);
+                    'token' => $token
+                ], 200);
             }
             else{
                 return response()->json([
-                    'status' => 401,
                     'message' => "Invalid credential"
-                ]);
+                ], 401);
             }
         }
         else{
             return response()->json([
-                'status' => 402,
                 'message' => "User not found"
-            ]);
+            ], 402);
         }
 
     }
@@ -65,8 +69,14 @@ class AuthController extends Controller
 
     }
 
-    public function signout(){
-        session()->flush();
-        return redirect()->route('home');
+    public function signout(Request $req){
+        $token = Token::where('token', $req->header('token'))->first();
+        $token->expired = true;
+        
+        if($token->save()){
+            return response()->json([
+                'status'=> 200
+            ]);
+        }
     }
 }

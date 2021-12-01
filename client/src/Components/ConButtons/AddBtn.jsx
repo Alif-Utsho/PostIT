@@ -8,7 +8,7 @@ export default class AddBtn extends Component {
     }
 
     addFriend = async receiver => {
-        const res = await axios.post('/api/addfriend', { 'receiver': receiver, sender: 2 })
+        const res = await axios.post('/api/addfriend', { 'receiver': receiver })
         if (res.data.status === 200) {
             this.setState({ req_sent: true })
             this.props.reload()

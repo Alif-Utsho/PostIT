@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import axios from 'axios'
+import { Link } from 'react-router-dom'
 class Login extends Component {
 
     state = {
@@ -15,10 +16,17 @@ class Login extends Component {
         console.log(this.state)
     }
 
-    handleSubmit = async e => {
+    handleSubmit = e => {
         e.preventDefault();
-        const res = await axios.post('/api/login', this.state);
-        console.log(res);
+        axios.post('/api/login', this.state)
+            .then(res => {
+                localStorage.setItem('token', res.data.token.token)
+                // localStorage.getItem('user_id', res.data.token.user_id)
+                if (res.data.user.type==='users') {
+                    window.location.pathname = "/newsfeed"
+                }
+            })
+            .catch(e => console.log(e))
     }
     render() {
         return (
@@ -30,22 +38,23 @@ class Login extends Component {
                                 <div className="card shadow-2-strong" style={{ borderRadius: "1rem" }}>
                                     <div className="card-body p-4 p-sm-5  text-center">
 
-                                        <a href="/" className="alert alert-danger col-12 btn fs-2 fw-bold">
-                                            <i className="fas fa-thumbs-up"></i>
-                                            Talkbuzz
-                                        </a>
+                                        
+                                        <Link className="alert alert-danger col-12 btn fs-2 fw-bold" to="/" style={{ fontFamily: "Yeseva One" }}>
+                                            <i className="fas fa-link"></i>
+                                            PostIT!!
+                                        </Link>
 
-                                        <h4 className="mt-5 mb-3">Sign in</h4>
+                                        <h4 className="mt-3 mb-3">Sign in</h4>
 
                                         <form onSubmit={this.handleSubmit}>
 
                                             <div className="form-outline mb-4">
-                                                <input type="text" id="email" name="email" onChange={this.onChange} value={this.state.email} class="form-control form-control-lg" placeholder="E-mail" />
+                                                <input type="text" id="email" name="email" onChange={this.onChange} value={this.state.email} className="form-control form-control-lg" placeholder="E-mail" />
 
                                             </div>
 
                                             <div className="form-outline mb-4">
-                                                <input type="password" id="password" name="password" onChange={this.onChange} value={this.state.password} class="form-control form-control-lg" placeholder="Password" />
+                                                <input type="password" id="password" name="password" onChange={this.onChange} value={this.state.password} className="form-control form-control-lg" placeholder="Password" />
 
                                             </div>
 

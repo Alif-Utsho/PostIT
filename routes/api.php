@@ -28,7 +28,7 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 // Auth routes
 Route::post('/login', [AuthController::class, 'login']);
 Route::post('/register', [AuthController::class, 'register']);
-Route::get('/signout', [AuthController::class, 'signout']);
+Route::put('/signout', [AuthController::class, 'signout']);
 
 
 // Post routes
@@ -50,7 +50,7 @@ Route::put('/unfriend', [ConnectionController::class, 'unfriend']);
 // User and Profile routes
 Route::get('/profile/{id}', [UserController::class, 'singleUser']);
 Route::put('/editprofile', [UserController::class, 'editprofile']);
-
+Route::get('/profile', [UserController::class, 'profile']);
 
 // React routes
 Route::get('/reacts/{post_id}', [ReactController::class, 'reacts']);

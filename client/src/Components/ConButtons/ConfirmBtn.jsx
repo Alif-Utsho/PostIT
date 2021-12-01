@@ -19,7 +19,7 @@ export default class ConfirmBtn extends Component {
 
     render() {
         return (
-            <div className="d-flex">
+            <div className="d-flex justify-content-center">
                 <div className="me-1">
                     <DeleteBtn reload={this.props.reload} req_id={this.props.req_id} />
                 </div>

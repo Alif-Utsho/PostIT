@@ -28,7 +28,7 @@ export default class Sent extends Component {
                                             <Link to={`/profile/${s.receiver.id}`} className="text-decoration-none text-dark">
                                                 <div>{s.receiver.name}</div>
                                             </Link>
-                                            <span className="text-muted">{s.receiver_profile && s.receiver.profile.bio && s.receiver_profile.bio.slice(0, 20)}{sent.receiver_profile && sent.receiver_profile.bio.length > 20 && '....'}</span>
+                                            {/* <span className="text-muted">{s.receiver_profile && s.receiver.profile.bio && s.receiver_profile.bio.slice(0, 20)}{sent.receiver_profile && sent.receiver_profile.bio.length > 20 && '....'}</span> */}
                                         </div>
 
                                         <span className="my-auto">

@@ -7,15 +7,35 @@ use Illuminate\Http\Request;
 use App\Models\User;
 use App\Models\Connection;
 use App\Models\Profile;
+use App\Models\Token;
 
 class UserController extends Controller
 {
     //
     
     public function singleUser(Request $req){
+        $token = Token::where('token', $req->header('token'))->where('expired', false)->first();
         $user = User::where('id', $req->id)
                 ->with('profile')
-                ->with('friends')
+                ->with('sendByfriends')
+                ->with('recByfriends')
+                ->with('request')
+                ->with('sent')
+                ->with('posts')
+                ->first();
+
+        return response()->json([
+            'user'=> $user,
+            'authId' => $token->user_id
+        ]);
+    }
+
+    public function profile(Request $req){
+        $token = Token::where('token', $req->header('token'))->where('expired', false)->first();
+        $user = User::where('id', $token->user_id)
+                ->with('profile')
+                ->with('sendByfriends')
+                ->with('recByfriends')
                 ->with('request')
                 ->with('sent')
                 ->with('posts')

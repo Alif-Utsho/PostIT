@@ -48,7 +48,7 @@ export default class AuthProfile extends Component {
         //     .then(res => this.setState({ connection: res.data }))
         //     .catch(e => console.log(e))
 
-        let user = await axios.get('/api/profile/2')
+        let user = await axios.get('/api/profile')
         let connection = await axios.get('api/connection')
         this.setState({
             ...user.data,
@@ -80,8 +80,9 @@ export default class AuthProfile extends Component {
 
     render() {
         const { user } = this.state
-        const { friends, sent, request } = this.state.connection
+        const { friends, sent } = this.state.connection
         // const { id } = this.props
+        
         return (
             <div>
                 <Navbar reload={this.reload.bind(this)} />
@@ -103,7 +104,7 @@ export default class AuthProfile extends Component {
                                             <Link className="text-decoration-none" to="/friend">
                                                 <div className="d-flex justify-content-between">
                                                     <div className="text-center col-12 text-dark">
-                                                        <h4><b>{friends && friends.length}</b></h4>
+                                                        <h4><b>{friends.length}</b></h4>
                                                         <h6 className="text-muted">Friends</h6>
                                                     </div>
                                                 </div>
@@ -115,7 +116,7 @@ export default class AuthProfile extends Component {
                                             <div type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasRight" aria-controls="offcanvasRight">
                                                 <div className="d-flex justify-content-between">
                                                     <div className="text-center col-12">
-                                                        <h4><b>{sent && sent.length}</b></h4>
+                                                        <h4><b>{user.sent.length}</b></h4>
                                                         <h6 className="text-muted">Following</h6>
                                                     </div>
                                                 </div>
@@ -125,7 +126,7 @@ export default class AuthProfile extends Component {
                                         <div className="p-2 mx-1 card rounded border-1 border-success col-md-3">
                                             <div className="d-flex justify-content-between">
                                                 <div className="text-center col-12">
-                                                    <h4><b>{request && request.length}</b></h4>
+                                                    <h4><b>{user.request.length}</b></h4>
                                                     <h6 className="text-muted">Follower</h6>
                                                 </div>
                                             </div>

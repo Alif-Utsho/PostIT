@@ -6,14 +6,20 @@ use Illuminate\Http\Request;
 
 use App\Models\User;
 use App\Models\Connection;
+use App\Models\Token;
 
 class ConnectionController extends Controller
 {
     //
+    private $token;
 
-    public function users(){
+    public function users(Request $req){
+        $token = Token::where('token', $req->header('token'))->where('expired', false)->first();
+
         $user = session()->get('user');
         $users = User::with('profile')
+                ->with('sendByfriends')
+                ->with('recByfriends')
                 ->with('request')
                 ->with('sent')
                 ->where('type', 'users')
@@ -21,13 +27,23 @@ class ConnectionController extends Controller
                 ->get();
         return response()->json([
             'users' => $users,
-            'session' => $user
+            'authId' => $token->user_id
         ]);
     }
 
 
-    public function connection(){
-        $request = Connection::where('receiver', 2)
+    public function connection(Request $req){
+        // return response()->json([
+        //     'req'=>$req->header('token')
+        // ]);
+
+        $token = Token::where('token', $req->header('token'))->where('expired', false)->first();
+
+        // return response()->json([
+        //     'token'=>$token
+        // ]);
+
+        $request = Connection::where('receiver', $token->user_id)
                 ->where('status', 'follower')
                 ->with('sender_profile')
                 ->with('receiver_profile')
@@ -36,7 +52,7 @@ class ConnectionController extends Controller
                 ->orderByDesc('created_at')
                 ->get();
 
-        $sent = Connection::where('sender', 2)
+        $sent = Connection::where('sender', $token->user_id)
                 ->where('status', 'follower')
                 ->with('sender_profile')
                 ->with('receiver_profile')
@@ -45,12 +61,12 @@ class ConnectionController extends Controller
                 ->orderByDesc('created_at')
                 ->get();
         
-        $friend = Connection::where(function($query){
-                                $query->where('receiver', 2)
+        $friend = Connection::where(function($query) use ($token) {
+                                $query->where('receiver', $token->user_id)
                                       ->where('status', 'friend');
                             })
-                ->orWhere(function($query){
-                    $query->where('sender', 2)
+                ->orWhere(function($query) use($token) {
+                    $query->where('sender', $token->user_id)
                           ->where('status', 'friend');
                 })
                 ->with('sender_profile')
@@ -64,13 +80,17 @@ class ConnectionController extends Controller
             'request' => $request,
             'sent' => $sent,
             'friends' => $friend,
-            'session' => session()->get('user')
+            'authId'=>$token->user_id
         ]);
     }
 
     public function addFriend(Request $req){
+        $token = Token::where('token', $req->header('token'))->where('expired', false)->first();
+        // return response()->json([
+        //     'token'=>$token
+        // ]);
         $var = new Connection();
-        $var->sender = $req->sender;
+        $var->sender = $token->user_id;
         $var->receiver = $req->receiver;
         $session = session()->get('user');
         if($var->save()){
