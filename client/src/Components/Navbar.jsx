@@ -11,6 +11,12 @@ export default class Navbar extends Component {
         modalShow: false
     }
 
+    componentDidMount() {
+        axios.get('/api/username')
+            .then(res => this.setState({ ...res.data }))
+            .catch(e=> console.log(e))
+    }
+
     handleShow = () => {
         this.setState({ modalShow: true })
     }
@@ -58,21 +64,24 @@ export default class Navbar extends Component {
 
                             </ul>
 
-                            <ul className="navbar-nav mb-2 mb-lg-0 ms-auto">
+                            {
+                                this.state.user &&
+                                <ul className="navbar-nav mb-2 mb-lg-0 ms-auto">
 
-                                <div className="nav-item dropdown">
-                                    <Link className="nav-link dropdown-toggle active" to="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                        <i className="fas fa-user-tag fs-6 px-2"><span className="fs-6 ms-2">ALiF</span></i>
-                                    </Link>
-                                    <ul className="dropdown-menu shadow" aria-labelledby="navbarDropdown">
-                                        <li><Link className="dropdown-item" to="/profile"><i className="fas fa-address-card me-2"></i>Profile</Link></li>
-                                        <li><Link className="dropdown-item" to="/friend"><i className="fas fa-user-friends me-2"></i>Friends</Link></li>
-                                        {/* <li><Link className="dropdown-item" to="#"><i className="fas fa-user-lock me-2 text-danger"></i>Block list</Link></li> */}
-                                        <li><hr className="dropdown-divider" /></li>
-                                        <li><button className="dropdown-item" onClick={this.signout}><i className="fas fa-sign-out-alt text-danger me-2"></i>Logout</button></li>
-                                    </ul>
-                                </div>
-                            </ul>
+                                    <div className="nav-item dropdown">
+                                        <Link className="nav-link dropdown-toggle active" to="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                            <i className="fas fa-user-tag fs-6 px-2"><span className="fs-6 fw-normal ms-2" style={{ fontFamily: 'arial' }}> { this.state.user.name.substring(0, this.state.user.name.indexOf(" ")) || this.state.user.name } </span></i>
+                                        </Link>
+                                        <ul className="dropdown-menu shadow" aria-labelledby="navbarDropdown">
+                                            <li><Link className="dropdown-item" to="/profile"><i className="fas fa-address-card me-2"></i>Profile</Link></li>
+                                            <li><Link className="dropdown-item" to="/friend"><i className="fas fa-user-friends me-2"></i>Friends</Link></li>
+                                            {/* <li><Link className="dropdown-item" to="#"><i className="fas fa-user-lock me-2 text-danger"></i>Block list</Link></li> */}
+                                            <li><hr className="dropdown-divider" /></li>
+                                            <li><button className="dropdown-item" onClick={this.signout}><i className="fas fa-sign-out-alt text-danger me-2"></i>Logout</button></li>
+                                        </ul>
+                                    </div>
+                                </ul>
+                            }
                         </div>
                     </div>
                 </nav>

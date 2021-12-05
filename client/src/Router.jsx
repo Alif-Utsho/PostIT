@@ -11,6 +11,9 @@ import AuthProfile from './Pages/Users/Profile/AuthProfile'
 import ProfileID from './Pages/Users/Profile/ProfileID'
 import SinglePostID from './Pages/Users/Post/SinglePostID'
 import axios from 'axios'
+import Dashboard from './Pages/Admin/Dashboard'
+import Users from './Pages/Admin/Users'
+import Posts from './Pages/Admin/Posts'
 // import AuthProfileFunction from './Pages/Users/Profile/AuthProfileFunction'
 
 
@@ -20,8 +23,38 @@ function Router() {
 
     axios.interceptors.request.use(function (config) {
         // Do something before request is sent
-        if (!localStorage.getItem('token') && window.location.pathname !== "/login" && window.location.pathname !== "/register") window.location.pathname = "/login"
+        //if (!localStorage.getItem('token') && window.location.pathname !== "/login" && window.location.pathname !== "/register") window.location.pathname = "/login"
         
+        console.log(window.location.pathname)
+        
+        switch (window.location.pathname) {
+            case "/login":
+            case "/registration":
+                if (localStorage.getItem('token')) window.location.pathname = "/newsfeed"
+                else return config;
+                break;
+            
+            case "/newsfeed":
+            case "/friend":
+            case "/findfriend":
+            case "/profile":
+                if (!localStorage.getItem('token')) window.location.pathname = "/login"
+                else return config;
+                break;
+            
+            case "/dashboard":
+            case "/users":
+            case "/comments":
+            case "/posts":
+            case "/reacts":
+                if (!localStorage.getItem('token')) window.location.pathname = "/login"
+                else return config;
+                break;
+                
+            default:
+                break;
+        }
+
         return config;
     }, function (error) {
         // Do something with request error
@@ -32,7 +65,8 @@ function Router() {
     axios.interceptors.response.use(function (response) {
         // Any status code that lie within the range of 2xx cause this function to trigger
         // Do something with response data
-        if (!localStorage.getItem('token')) window.location.pathname = "/login"
+        // if (!localStorage.getItem('token')) window.location.pathname = "/login"
+        
         return response;
     }, function (error) {
         // Any status codes that falls outside the range of 2xx cause this function to trigger
@@ -51,6 +85,7 @@ function Router() {
                 <Route exact path='/registration' element={<Registration />} />
 
 
+                
                 {/* Users */}
                 <Route exact path='/newsfeed' element={<Newsfeed />} />
                 <Route exact path='/findfriend' element={<Findfriend />} />
@@ -62,6 +97,12 @@ function Router() {
                 {/* Post */}
                 <Route exact path='/posts/:id' element={<SinglePostID />} />
 
+                
+
+                {/* Admin routes */}
+                <Route exact path='/dashboard' element={<Dashboard />} />
+                <Route exact path='/users' element={<Users />} />
+                <Route exact path='/posts' element={<Posts />} />
 
 
             </Routes>

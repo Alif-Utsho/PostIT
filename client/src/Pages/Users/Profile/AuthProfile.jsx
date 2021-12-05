@@ -50,9 +50,11 @@ export default class AuthProfile extends Component {
 
         let user = await axios.get('/api/profile')
         let connection = await axios.get('api/connection')
+        let posts = await axios.get(`/api/postofuser/auth`)
         this.setState({
             ...user.data,
-            connection: connection.data
+            connection: connection.data,
+            ...posts.data
         })
     }
 
@@ -79,7 +81,7 @@ export default class AuthProfile extends Component {
     }
 
     render() {
-        const { user } = this.state
+        const { user, posts } = this.state
         const { friends, sent } = this.state.connection
         // const { id } = this.props
         
@@ -191,11 +193,11 @@ export default class AuthProfile extends Component {
 
                                     <div className="card-header fs-5 border-0 d-flex">All posts <span className="ms-auto">{user.posts && user.posts.length}</span></div>
                                     {
-                                        user.posts ?
-                                            user.posts.length > 0 ?
-                                                user.posts.reverse().map(post => {
+                                        posts ?
+                                            posts.length > 0 ?
+                                                posts.map(post => {
                                                     return (
-                                                        <Post post={post} user={user} reload={this.reload.bind(this)} key={post.id} />
+                                                        <Post post={post} user={user} authId={user.id} reload={this.reload.bind(this)} key={post.id} />
                                                     )
                                                 }) :
                                                 <div className="d-flex justify-content-center mt-5 py-4 alert alert-danger">

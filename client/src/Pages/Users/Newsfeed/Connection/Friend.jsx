@@ -35,7 +35,6 @@ export default class Friend extends Component {
     }
     render() {
         const { friends, request, sent, authId } = this.state
-        console.log(this.state)
         return (
             <div>
                 <Navbar reload={this.reload.bind(this)} />

@@ -70,4 +70,12 @@ class UserController extends Controller
             'message'=>'Something went wrong'
         ]);
     }
+
+    public function username(Request $req){
+        $token = Token::where('token', $req->header('token'))->where('expired', false)->first();
+        $user = User::where('id', $token->user_id)->first();
+        return response()->json([
+            'user'=> $user
+        ]);
+    }
 }

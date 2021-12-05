@@ -20,7 +20,6 @@ export default class Listitem extends Component {
             friends = user.send_byfriends.concat(user.rec_byfriends)
         }
 
-        if (user.id === authId) return null
         return (
             <div>
                 <li className="list-group-item d-flex justify-content-between border-start mb-2 border-primary border-0 border-2 rounded align-items-start">
@@ -29,7 +28,7 @@ export default class Listitem extends Component {
                         <Link to={`/profile/${user.id}`} className="text-decoration-none text-dark">
                             <div className={user.profile ? "fw-bold" : "fw-bold my-auto mt-2"}>{user.name}</div>
                         </Link>
-                        <span className="text-muted">{user.profile && user.profile.bio}</span>
+                        <span className="text-muted d-md-block d-none">{user.profile && user.profile.bio}</span>
                     </div>
 
                     {/* <span className="my-auto">
@@ -47,6 +46,7 @@ export default class Listitem extends Component {
 
 
                     {/*  */}
+                    <div className="my-auto">
                     {
                         user.sent.filter(send => send.receiver === authId).length > 0 &&
                         <ConfirmBtn req_id={user.sent.find(send => send.receiver === authId).id} reload={this.props.reload} key={user.sent.find(send => send.receiver === authId).id} />
@@ -70,6 +70,7 @@ export default class Listitem extends Component {
                         ) &&
                         <AddBtn user_id={user.id} reload={this.props.reload} />
                     }
+                    </div>
                 </li>
             </div>
         )

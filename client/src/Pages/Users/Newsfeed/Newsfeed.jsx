@@ -68,7 +68,7 @@ class Newsfeed extends Component {
                 <div className="container col-lg-9">
                     <div className="d-flex justify-content-center mt-4">
 
-                        <div className="col-lg-7 col-12 overflow-auto" style={{ maxHeight: '630px' }}>
+                        <div className="col-lg-7 col-12 overflow-auto px-md-4" style={{ maxHeight: '630px' }}>
 
                             {
                                 posts ?
@@ -76,7 +76,7 @@ class Newsfeed extends Component {
                                         posts
                                             .filter(post => friendList.includes(post.user.id))
                                             .map(post => {
-                                                return <Post post={post} user={post.user} reload={this.reload.bind(this)} key={post.id} />
+                                                return <Post post={post} user={post.user} authId={authId} reload={this.reload.bind(this)} key={post.id} />
                                             }) :
                                         <div className="d-flex justify-content-center mt-5 py-4 alert alert-danger">
                                             <h3>No post yet</h3>

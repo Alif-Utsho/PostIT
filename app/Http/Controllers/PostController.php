@@ -13,22 +13,60 @@ use App\Models\Token;
 class PostController extends Controller
 {
     //
-    public function posts(){
+    public function posts(Request $req){
         
-        $posts = Post::with('user')->orderBy('created_at', 'desc')->get();
+        $token = Token::where('token', $req->header('token'))->where('expired', false)->first();
+
+        $posts = Post::with('user')
+                ->with('reacts')
+                ->with('comments')
+                ->where('user_id','!=', $token->user_id)
+                ->orderBy('created_at', 'desc')
+                ->get();
         return response()->json([
             'posts' => $posts
         ]);
+    }
 
+
+    public function postofuser(Request $req){
+        if($req->id === 'auth'){
+            $token = Token::where('token', $req->header('token'))->where('expired', false)->first();
+            $id = $token->user_id;
+        }
+        else $id = $req->id;
+        $posts = Post::with('user')
+                ->with('reacts')
+                ->with('comments')
+                ->where('user_id', $id)
+                ->orderBy('created_at', 'desc')
+                ->get();
+
+        return response()->json([
+            'posts'=>$posts
+        ]);
     }
 
     public function singlePost(Request $req){
+        $token = Token::where('token', $req->header('token'))->where('expired', false)->first();
+
         $post = Post::where('id', $req->id)
             ->with('user')
             ->with('reacts')
+            ->with('comments')
             ->first();
+
+        $user = User::where('id', $token->user_id)
+                ->with('profile')
+                ->with('sendByfriends')
+                ->with('recByfriends')
+                ->with('request')
+                ->with('sent')
+                ->with('posts')
+                ->first();
         return response()->json([
-            'post'=>$post
+            'post'=>$post,
+            'authuser'=>$user
         ]);
     }
 

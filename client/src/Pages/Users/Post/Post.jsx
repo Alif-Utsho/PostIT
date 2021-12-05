@@ -2,7 +2,6 @@ import axios from 'axios'
 import React, { Component } from 'react'
 import { Link } from 'react-router-dom'
 import EditPost from './EditPost'
-import ReactList from './ReactList'
 
 export default class Post extends Component {
 
@@ -10,41 +9,44 @@ export default class Post extends Component {
         liked: false,
         // reacts: []
         // reactCount
+        readmore: false,
         reload: false
     }
 
     componentDidMount() {
         this.fetchData()
-    }
 
+    }
 
     componentDidUpdate(prevProps, prevState) {
         if (this.state.reload) {
-            this.fetchData()
             this.setState({ reload: false })
         }
+
     }
 
     fetchData() {
-        axios.get(`/api/reacts/${this.props.post.id}`)
-            .then(res => {
-                this.setState({ ...res.data })
-                res.data.reacts.filter(react => react.user_id === this.state.authId).length > 0 &&
-                    this.setState({ liked: true })
-            })
-            .catch(e => console.log(e))
+        this.props.post.reacts && this.props.post.reacts
+            .filter(react => react.user_id === this.props.authId).length > 0 &&
+            this.setState({ liked: true })
     }
 
     likeClick = e => {
-        
+
         !this.state.liked ? (
             axios.post('/api/like', { post_id: this.props.post.id })
-                .then(res => this.reload())
+                .then(res => {
+                    this.reload()
+                    this.props.reload()
+                })
                 .catch(e => console.log(e))
         ) : (
 
             axios.put('/api/unlike', { post_id: this.props.post.id })
-                .then(res => this.reload())
+                .then(res => {
+                    this.reload()
+                    this.props.reload()
+                })
                 .catch(e => console.log(e))
         )
         this.setState({
@@ -79,13 +81,6 @@ export default class Post extends Component {
         this.showModal()
     }
 
-    reactModalShowHandler = (reactList) => {
-        if (reactList) this.showReactModal = reactList.handleShow
-    }
-
-    reactClick = () => {
-        this.showReactModal()
-    }
 
     reload() {
         this.setState({ reload: true })
@@ -93,7 +88,7 @@ export default class Post extends Component {
 
     render() {
         const { post, user } = this.props
-        const { reacts, authId } = this.state
+        const { authId } = this.props
 
         const d = new Date()
         const month = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
@@ -163,21 +158,63 @@ export default class Post extends Component {
                         </div>
 
                     </div>
-                    <Link to={`/posts/${post.id}`} className="text-decoration-none text-dark" style={{ cursor: 'default'}}>
-                        <p className="card-text mb-3">{post.desc}</p>
-                    </Link>
-                    <p className="mb-0">
-                        <span onClick={this.reactClick} style={{ cursor: 'pointer' }}>
-                            {reacts && reacts.length > 0 && <i className="far fa-heart me-1 text-danger" ></i>}
-                            {reacts && reacts.length > 0 && reacts.length}
-                        </span>
+                    <p className="card-text mb-3">
+                        {
+                            post.desc.length > 100 ?
+                                (
+                                    !this.state.readmore ?
+                                        <span>
+                                            <Link to={`/posts/${post.id}`} className="text-decoration-none text-dark" style={{ cursor: 'default' }}>
+                                                {post.desc.slice(0, 100)}... 
+                                            </Link>
+                                            <b onClick={() => this.setState({ readmore: true })} style={{ cursor: 'pointer' }}> See more</b>
+                                        </span> :
+                                        <span>
+                                            {post.desc}
+                                            <b onClick={() => this.setState({ readmore: false })} style={{ cursor: 'pointer' }}> <br /> See less</b>
+                                        </span>
+                                ) :
+                                <span>{post.desc}</span>
+                        }
                     </p>
+                    <Link to={`/posts/${post.id}`} className="text-decoration-none text-dark" style={{ cursor: 'pointer' }}>
+
+                        {/* {
+                        (post.reacts && post.reacts.length > 0) || (post.comments && post.comments.length > 0) && 1
+                    } */}
+
+                        {
+                            !this.props.showReact &&
+                            <p className="mb-0">
+                                {
+                                    post.reacts && post.reacts.length > 0 &&
+
+                                    <span>
+                                        <i className="far fa-heart me-1 text-danger" ></i>
+                                        {post.reacts.length}
+                                    </span>
+                                }
+                                {
+                                    post.comments && post.comments.length > 0 &&
+                                    <span className="ms-3">
+                                        <i className="far me-1 fa-comment-alt"></i>
+                                        {post.comments.length}
+                                    </span>
+                                }
+
+                            </p>
+                        }
+
+                    </Link>
                     <hr className="col-12 mb-1" />
-                    <div className="d-flex col-md-10 mx-auto justify-content-between">
-                        <div className={this.state.liked ? "btn btn-sm text-danger fw-bold" : "btn btn-sm"} onClick={this.likeClick}><i className={this.state.liked ? "fas fa-heart me-1" : "far fa-heart me-1"} ></i>Love</div>
-                        <div className="btn btn-sm"><i className="far fa-comment me-1"></i>Comment</div>
-                        <div className="btn btn-sm"><i className="far fa-share-square me-1"></i>Share</div>
-                    </div>
+                    {
+                        authId !== 1 &&    
+                        <div className="d-flex col-md-10 mx-auto justify-content-between">
+                            <div className={this.state.liked ? "btn btn-sm text-danger fw-bold" : "btn btn-sm"} onClick={this.likeClick}><i className={this.state.liked ? "fas fa-heart me-1" : "far fa-heart me-1"} ></i>Love</div>
+                            <div className="btn btn-sm"><i className="far fa-comment-alt me-1"></i>Comment</div>
+                            <div className="btn btn-sm"><i className="far fa-share-square me-1"></i>Share</div>
+                        </div>
+                    }
                 </div>
 
                 {/* edit post modal */}
@@ -189,13 +226,6 @@ export default class Post extends Component {
                     key={post.id}
                 />
 
-                <ReactList
-                    reacts={reacts ? reacts : []}
-                    ref={this.reactModalShowHandler}
-                    key={`react${post.id}`}
-                    reload={this.props.reload}
-                    reloadPost={this.reload.bind(this)}
-                />
             </div>
         )
     }

@@ -16,14 +16,13 @@ class ConnectionController extends Controller
     public function users(Request $req){
         $token = Token::where('token', $req->header('token'))->where('expired', false)->first();
 
-        $user = session()->get('user');
         $users = User::with('profile')
                 ->with('sendByfriends')
                 ->with('recByfriends')
                 ->with('request')
                 ->with('sent')
                 ->where('type', 'users')
-                // ->where('email', '!=', session()->get('user')->email)
+                ->where('id', '!=', $token->user_id)
                 ->get();
         return response()->json([
             'users' => $users,
@@ -33,15 +32,8 @@ class ConnectionController extends Controller
 
 
     public function connection(Request $req){
-        // return response()->json([
-        //     'req'=>$req->header('token')
-        // ]);
 
         $token = Token::where('token', $req->header('token'))->where('expired', false)->first();
-
-        // return response()->json([
-        //     'token'=>$token
-        // ]);
 
         $request = Connection::where('receiver', $token->user_id)
                 ->where('status', 'follower')

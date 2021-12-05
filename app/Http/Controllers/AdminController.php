@@ -1,0 +1,29 @@
+<?php
+
+namespace App\Http\Controllers;
+
+use Illuminate\Http\Request;
+
+use App\Models\User;
+use App\Models\Post;
+use App\Models\React;
+use App\Models\Token;
+use App\Models\Comment;
+
+class AdminController extends Controller
+{
+    //
+    public function countAll(){
+        $posts = Post::all()->count();
+        $users = User::all()->count();
+        $comments = Comment::all()->count();
+        $reacts = React::all()->count();
+
+        return response()->json([
+            'posts' => $posts,
+            'users' => $users,
+            'comments' => $comments,
+            'reacts' => $reacts
+        ]);
+    }
+}

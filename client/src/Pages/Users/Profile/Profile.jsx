@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import axios from 'axios'
+import { Link } from 'react-router-dom'
 
 import Navbar from '../../../Components/Navbar'
 import Post from '../Post/Post'
@@ -22,7 +23,7 @@ export default class Profile extends Component {
 
     componentDidMount() {
         this.fetchData()
-        
+
     }
 
     componentDidUpdate(prevProps, prevState) {
@@ -41,6 +42,9 @@ export default class Profile extends Component {
         axios.get(`/api/profile/${this.props.id}`)
             .then(res => this.setState({ ...res.data }))
             .catch(e => console.log(e))
+        axios.get(`/api/postofuser/${this.props.id}`)
+            .then(res => this.setState({ ...res.data }))
+            .catch(e => console.log(e))
         // axios.get('/api/connection')
         //     .then(res => this.setState({ ...res.data }))
         //     .catch(e => console.log(e))
@@ -51,15 +55,28 @@ export default class Profile extends Component {
     }
 
     render() {
-        const { user, authId } = this.state
+        const { user, posts, authId } = this.state
         let friends = [];
         if (user && (user.send_byfriends || user.rec_byfriends)) {
             friends = user.send_byfriends.concat(user.rec_byfriends)
         }
         return (
             <div>
-                <Navbar reload={this.reload.bind(this)} />
+                {user && !(authId === 1) && <Navbar reload={this.reload.bind(this)} />}
 
+                {
+                    user && authId === 1 &&
+                    <div className="offset-3 my-auto p-3">
+                        <nav aria-label="breadcrumb">
+                            <ol class="breadcrumb">
+                                <li class="breadcrumb-item"><Link to="/dashboard" className=" text-decoration-none">Dashboard</Link></li>
+                                <li class="breadcrumb-item"><Link to="/users" className=" text-decoration-none">Users</Link></li>
+                                <li class="breadcrumb-item active" aria-current="page">{user.name}</li>
+                            </ol>
+                        </nav>
+                    </div>
+                }
+                
                 {user ?
                     <div>
 
@@ -163,22 +180,25 @@ export default class Profile extends Component {
                                                         !(user.sent.find(s => s.status !== 'friend' && s.receiver !== authId))) &&
                                                         <AddBtn user_id={user.id} reload={this.reload.bind(this)} />
                                                     } */}
+
+                                                    
                                                     {
-                                                        user.sent.filter(send => send.receiver === authId).length > 0 &&
+                                                        user && authId !== 1 && user.sent.filter(send => send.receiver === authId).length > 0 &&
                                                         <ConfirmBtn req_id={user.sent.find(send => send.receiver === authId).id} reload={this.reload.bind(this)} key={user.sent.find(send => send.receiver === authId).id} />
-                                                        
+
                                                     }
 
                                                     {
-                                                        user.request.filter(req => req.sender === authId).length > 0 &&
+                                                        user && authId !== 1 && user.request.filter(req => req.sender === authId).length > 0 &&
                                                         <CancelBtn req_id={user.request.find(req => req.sender === authId).id} reload={this.reload.bind(this)} key={user.request.find(req => req.sender === authId).id} />
                                                     }
 
                                                     {
-                                                        friends.filter(frnd => frnd.sender === authId || frnd.receiver === authId).length > 0 &&
-                                                        <UnfriendBtn req_id={friends.find(frnd=>frnd.sender===authId || frnd.receiver===authId).id} reload={this.reload.bind(this)} />
+                                                        user && authId !== 1 && friends.filter(frnd => frnd.sender === authId || frnd.receiver === authId).length > 0 &&
+                                                        <UnfriendBtn req_id={friends.find(frnd => frnd.sender === authId || frnd.receiver === authId).id} reload={this.reload.bind(this)} />
                                                     }
                                                     {
+                                                        user && authId !== 1 &&
                                                         (
                                                             !(user.sent.filter(send => send.receiver === authId).length > 0) &&
                                                             !(user.request.filter(req => req.sender === authId).length > 0) &&
@@ -231,12 +251,12 @@ export default class Profile extends Component {
                             <div className="col-12 col-lg-7 mx-auto mt-4">
                                 <div className="card-header fs-4 border-0 d-flex">Posts <span className="ms-auto">{user.posts.length}</span></div>
                                 {
-                                    friends.filter(frnd => frnd.sender === authId || frnd.receiver === authId).length > 0 ?
-                                        user.posts ?
-                                            user.posts.length > 0 ?
-                                                user.posts.reverse().map(post => {
+                                    friends.filter(frnd => frnd.sender === authId || frnd.receiver === authId).length > 0 || authId===1 ?
+                                        posts ?
+                                            posts.length > 0 ?
+                                                posts.map(post => {
                                                     return (
-                                                        <Post post={post} user={user} key={post.id} reload={this.reload.bind(this)} />
+                                                        <Post post={post} user={user} authId={authId} key={post.id} reload={this.reload.bind(this)} />
                                                     )
                                                 }) :
                                                 <div className="d-flex justify-content-center mt-5 py-4 alert alert-danger">

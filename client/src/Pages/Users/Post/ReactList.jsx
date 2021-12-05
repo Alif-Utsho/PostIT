@@ -46,7 +46,7 @@ export default class ReactList extends Component {
                                         this.props.reacts.reverse().map(react => {
                                             return (
                                                 <div key={react.user.id}>
-                                                    <Link to={`/profile/${react.user.id}`} className="d-flex mt-2 text-decoration-none text-dark">
+                                                    <Link onClick={this.handleClose} to={`/profile/${react.user.id}`} className="d-flex mt-2 text-decoration-none text-dark">
                                                         <i className="fas rounded-circle fa-user me-3 border border-light rounded-circle p-2 fs-6 my-auto alert alert-success position-relative">
                                                             <i className="fas fa-heart position-absolute top-100 text-danger start-100 translate-middle" style={{fontSize: '12px', marginTop: '-6px', marginLeft: '-2px'}}></i>
                                                         </i>
