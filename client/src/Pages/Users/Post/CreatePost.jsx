@@ -1,10 +1,11 @@
 import React, { Component } from 'react'
 import axios from 'axios'
+import ToastBar from '../../../Components/ToastBar'
 
 export default class CreatePost extends Component {
 
     state = {
-        newPost: ''
+        newPost: '',
     }
     
 
@@ -16,21 +17,34 @@ export default class CreatePost extends Component {
     handleSubmit = e => {
         e.preventDefault()
 
-        axios.post('/api/createpost', { desc: this.state.newPost, user_id: 2 })
+        axios.post('/api/createpost', { desc: this.state.newPost })
             .then(res => {
                 if(this.props.hideModal) this.props.hideModal()
                 this.props.reload()
+                this.showToast(res.data.message)
+                this.props.showToast(res.data.message)
+
             })
             .catch(e => console.log(e))
 
         this.setState({ newPost: '' })
         
     }
+
+
+    showToastHandler = (toast) => {
+        if (toast) this.showToast = toast.toastShow
+    }
+
     render() {
         
         return (
             <div>
-                
+
+                <ToastBar
+                    ref={this.showToastHandler}
+                />
+
                 <div className="mb-2">
                     <div className="form-group">
                         <textarea name="newPost" onChange={this.onchangeHandler} value={this.state.newPost} className="form-control" id="exampleFormControlTextarea1" rows="3" placeholder="Write down your thoughts here and share with friends"></textarea>

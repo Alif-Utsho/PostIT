@@ -64,7 +64,7 @@ class Newsfeed extends Component {
         })
         return (
             <div>
-                <Navbar />
+                <Navbar reload={this.reload.bind(this)} />
                 <div className="container col-lg-9">
                     <div className="d-flex justify-content-center mt-4">
 

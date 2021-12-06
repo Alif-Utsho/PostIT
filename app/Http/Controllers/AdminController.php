@@ -9,6 +9,7 @@ use App\Models\Post;
 use App\Models\React;
 use App\Models\Token;
 use App\Models\Comment;
+use App\Models\Report;
 
 class AdminController extends Controller
 {
@@ -18,12 +19,14 @@ class AdminController extends Controller
         $users = User::all()->count();
         $comments = Comment::all()->count();
         $reacts = React::all()->count();
+        $reports = Report::all()->count();
 
         return response()->json([
             'posts' => $posts,
             'users' => $users,
             'comments' => $comments,
-            'reacts' => $reacts
+            'reacts' => $reacts,
+            'reports' => $reports
         ]);
     }
 }

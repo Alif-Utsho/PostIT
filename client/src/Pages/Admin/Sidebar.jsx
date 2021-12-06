@@ -31,35 +31,23 @@ class Sidebar extends Component {
                         </Link>
                     </li>
                     <li className="mb-1">
-                        <button className="btn btn-toggle align-items-center rounded collapsed text-white " data-bs-toggle="collapse" data-bs-target="#home-collapse" aria-expanded="true">
+                        <Link to="/users" className="btn link-dark rounded text-white text-decoration-none">
                             <i className="fas fa-users"></i> &nbsp;
                             Users
-                        </button>
-                        <div className="collapse ms-5" id="home-collapse">
-                            <ul className="btn-toggle-nav list-unstyled fw-normal pb-1">
-                                {/* <li><Link to="#" className="link-dark rounded text-white">Add new</Link></li> */}
-                                <li><Link to="/users" className="link-dark rounded text-white text-decoration-none">List</Link></li>
-                            </ul>
-                        </div>
+                        </Link>
                     </li>
                     <li className="mb-1">
-                        <button className="btn btn-toggle align-items-center rounded collapsed text-white" data-bs-toggle="collapse" data-bs-target="#dashboard-collapse" aria-expanded="false">
+                        <Link to="/posts" className="btn link-dark rounded text-white text-decoration-none">
                             <i className="fas fa-copy"></i> &nbsp;
                             Posts
-                        </button>
-                        <div className="collapse ms-5" id="dashboard-collapse">
-                            <ul className="btn-toggle-nav list-unstyled fw-normal pb-1">
-                                {/* <li><Link to="#" className="link-dark rounded text-white">Add new</Link></li> */}
-                                <li><Link to="/posts" className="link-dark rounded text-white text-decoration-none">List</Link></li>
-                            </ul>
-                        </div>
+                        </Link>
                     </li>
-                    
+
                     <li className="mb-1">
-                        <button className="btn align-items-center rounded text-white">
+                        <Link to="/reports" className="btn link-dark rounded text-white text-decoration-none">
                             <i className="fas fa-file-alt"></i> &nbsp;
                             Reports
-                        </button>
+                        </Link>
                     </li>
                     <li className="border-top my-3"></li>
                     <li className="mb-1">
@@ -69,7 +57,7 @@ class Sidebar extends Component {
                         </button>
                         <div className="collapse ms-5" id="account-collapse">
                             <ul className="btn-toggle-nav list-unstyled fw-normal pb-1">
-                                <li><span onClick={this.signout} className="link-dark rounded text-danger text-decoration-none" style={{cursor: 'pointer'}}>Sign out</span></li>
+                                <li><span onClick={this.signout} className="link-dark rounded text-danger text-decoration-none" style={{ cursor: 'pointer' }}>Sign out</span></li>
                             </ul>
                         </div>
                     </li>

@@ -2,6 +2,8 @@ import axios from 'axios'
 import React, { Component } from 'react'
 import { Link } from 'react-router-dom'
 import EditPost from './EditPost'
+import Report from './Report'
+import ToastBar from '../../../Components/ToastBar'
 
 export default class Post extends Component {
 
@@ -59,6 +61,7 @@ export default class Post extends Component {
         axios.put('/api/deletepost', { id: post_id })
             .then(res => {
                 this.props.reload()
+                this.showToast(res.data.message)
             })
             .catch(e => console.log(e))
     }
@@ -67,18 +70,31 @@ export default class Post extends Component {
         axios.put('/api/editpost', { desc, id })
             .then(res => {
                 this.props.reload()
+                this.showToast(res.data.message)
             })
             .catch(e => console.log(e))
 
         this.setState({ newPost: '' })
     }
 
+
+
     modalShowHandler = (editPost) => {
-        if (editPost) this.showModal = editPost.handleShow
+        if (editPost) this.showModaledit = editPost.handleEditShow
+    }
+    editClick = () => {
+        this.showModaledit()
     }
 
-    editClick = () => {
-        this.showModal()
+    reportModalShowHandler = (reportModal) => {
+        if (reportModal) this.showModalreport = reportModal.handleReportShow
+    }
+    reportClick = () => {
+        this.showModalreport()
+    }
+
+    showToastHandler = (toast) => {
+        if (toast) this.showToast = toast.toastShow
     }
 
 
@@ -145,15 +161,25 @@ export default class Post extends Component {
                             <button className="bg-transparent border-0" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false"><i className="fas fa-ellipsis-h text-secondary"></i></button>
                             <ul className="dropdown-menu" aria-labelledby="dropdownMenuButton1">
                                 {
-                                    (user.id === authId) ?
+                                    (user.id === authId || authId === 1) ?
                                         <div>
-                                            <li><button className="dropdown-item" onClick={this.editClick}><i className="fas fa-pen"></i>  Edit post</button></li>
+                                            {
+                                                authId !== 1 &&
+                                                <li><button className="dropdown-item" onClick={this.editClick}><i className="fas fa-pen"></i>  Edit post</button></li>
+                                            }
 
                                             <li><button onClick={() => this.deletePost(post.id)} className="dropdown-item text-danger"><i className="fas fa-trash-alt"></i> Delete post</button></li>
                                         </div> :
-
-                                        <li><button className="dropdown-item" href="#"><i className="fas fa-bug"></i> Report to admin</button></li>
-                                }
+                                        <div>
+                                            {
+                                                post.reports &&
+                                                    post.reports.filter(report => report.user_id === authId).length > 0 ?
+                                                    <li className="dropdown-item"> You have already reported to this post </li> :
+                                                    <li><button className="dropdown-item" onClick={this.reportClick}><i className="fas fa-bug"></i> Report to admin</button></li>
+                                                    
+                                            }
+                                        </div>
+                                    }
                             </ul>
                         </div>
 
@@ -165,7 +191,7 @@ export default class Post extends Component {
                                     !this.state.readmore ?
                                         <span>
                                             <Link to={`/posts/${post.id}`} className="text-decoration-none text-dark" style={{ cursor: 'default' }}>
-                                                {post.desc.slice(0, 100)}... 
+                                                {post.desc.slice(0, 100)}...
                                             </Link>
                                             <b onClick={() => this.setState({ readmore: true })} style={{ cursor: 'pointer' }}> See more</b>
                                         </span> :
@@ -208,10 +234,15 @@ export default class Post extends Component {
                     </Link>
                     <hr className="col-12 mb-1" />
                     {
-                        authId !== 1 &&    
+                        authId !== 1 &&
                         <div className="d-flex col-md-10 mx-auto justify-content-between">
                             <div className={this.state.liked ? "btn btn-sm text-danger fw-bold" : "btn btn-sm"} onClick={this.likeClick}><i className={this.state.liked ? "fas fa-heart me-1" : "far fa-heart me-1"} ></i>Love</div>
-                            <div className="btn btn-sm"><i className="far fa-comment-alt me-1"></i>Comment</div>
+                            <div className="btn btn-sm">
+
+                                <Link to={`/posts/${post.id}`} className="text-decoration-none text-dark">
+                                    <i className="far fa-comment-alt me-1"></i>Comment
+                                </Link>
+                            </div>
                             <div className="btn btn-sm"><i className="far fa-share-square me-1"></i>Share</div>
                         </div>
                     }
@@ -224,6 +255,18 @@ export default class Post extends Component {
                     ref={this.modalShowHandler}
                     reload={this.props.reload}
                     key={post.id}
+                />
+
+                <Report
+                    post={post}
+                    editPost={this.editPost}
+                    ref={this.reportModalShowHandler}
+                    reload={this.props.reload}
+                    key={`report${post.id}`}
+                />
+
+                <ToastBar
+                    ref={this.showToastHandler}
                 />
 
             </div>

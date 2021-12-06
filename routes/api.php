@@ -10,6 +10,7 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\ReactController;
 use App\Http\Controllers\CommentController;
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\ReportController;
 
 
 /*
@@ -66,6 +67,9 @@ Route::post('/createcomment', [CommentController::class, 'createcomment']);
 Route::put('/deletecomment', [CommentController::class, 'deleteComment']);
 Route::put('/editcomment', [CommentController::class, 'editComment']);
 
+// Report routes
+Route::post('/createreport', [ReportController::class, 'createreport']);
+Route::get('/reports', [ReportController::class, 'reports']);
 
 
 // Admin routes

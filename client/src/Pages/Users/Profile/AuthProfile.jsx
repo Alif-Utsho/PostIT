@@ -7,6 +7,7 @@ import Post from '../Post/Post'
 import EditProfile from './EditProfile'
 import Sent from '../Newsfeed/Connection/Sent'
 import CreatePost from '../Post/CreatePost'
+import ToastBar from '../../../Components/ToastBar'
 
 export default class AuthProfile extends Component {
     state = {
@@ -62,6 +63,10 @@ export default class AuthProfile extends Component {
         if (editProfile) this.showModal = editProfile.handleShow
     }
 
+    showToastHandler = (toast) => {
+        if (toast) this.showToast = toast.toastShow
+    }
+
     editClick = () => {
         this.showModal()
     }
@@ -72,6 +77,7 @@ export default class AuthProfile extends Component {
                 // profile.preventDefault()
                 // window.location.reload()
                 this.reload()
+                this.showToast("Profile updated successfully")
             })
             .catch(e => console.log(e))
     }
@@ -220,6 +226,10 @@ export default class AuthProfile extends Component {
                             </div>
                         </div>
                 }
+
+                <ToastBar
+                    ref={this.showToastHandler}
+                />
             </div>
 
         )

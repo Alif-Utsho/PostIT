@@ -14,6 +14,7 @@ import axios from 'axios'
 import Dashboard from './Pages/Admin/Dashboard'
 import Users from './Pages/Admin/Users'
 import Posts from './Pages/Admin/Posts'
+import Reports from './Pages/Admin/Reports'
 // import AuthProfileFunction from './Pages/Users/Profile/AuthProfileFunction'
 
 
@@ -103,6 +104,7 @@ function Router() {
                 <Route exact path='/dashboard' element={<Dashboard />} />
                 <Route exact path='/users' element={<Users />} />
                 <Route exact path='/posts' element={<Posts />} />
+                <Route exact path='/reports' element={ <Reports />} />
 
 
             </Routes>

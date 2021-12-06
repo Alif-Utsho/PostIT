@@ -20,10 +20,10 @@ export default class EditPost extends Component {
         })
     }
 
-    handleShow = () => {
+    handleEditShow = () => {
         this.setState({ modalShow: true })
     }
-    handleClose = () => {
+    handleEditClose = () => {
         this.setState({ modalShow: false })
     }
 
@@ -35,7 +35,7 @@ export default class EditPost extends Component {
     render() {
         return (
             <div>
-                <Modal show={this.state.modalShow} onHide={this.handleClose}>
+                <Modal show={this.state.modalShow} onHide={this.handleEditClose}>
                     <Modal.Header closeButton>
                         <Modal.Title>Edit Post</Modal.Title>
                     </Modal.Header>

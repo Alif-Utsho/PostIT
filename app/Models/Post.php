@@ -18,6 +18,10 @@ class Post extends Model
     public function comments(){
         return $this->hasMany(Comment::class);
     }
+
+    public function reports(){
+        return $this->hasMany(Report::class);
+    }
     // public function reacts(){
     //     return $this->hasMany(React::class, 'user_id');
     // }

@@ -7,7 +7,7 @@ import axios from 'axios'
 export default class Dashboard extends Component {
 
     state = {
-        reload: false
+        reload: false,
     }
 
     componentDidMount() {
@@ -28,12 +28,12 @@ export default class Dashboard extends Component {
     }
 
     reload() {
-        this.setState({ reload: true })
+        this.setState({ reload: true, showToast: true })
     }
 
 
     render() {
-        const { users, posts, reacts, comments } = this.state
+        const { users, posts, reacts, comments, reports } = this.state
         return (
             <div>
                 <div className="d-flex">
@@ -103,7 +103,7 @@ export default class Dashboard extends Component {
                                 <Link to="/reports" className="text-decoration-none my-auto" >
                                     <div className="card-body d-flex">
                                         <div className="my-auto">
-                                            <h1 className="fw-bold text-dark">173</h1>
+                                            <h1 className="fw-bold text-dark">{ reports || 0}</h1>
                                             <h5 className="text-muted"> Reports </h5>
                                         </div>
                                         <p className="ms-auto my-auto">
@@ -112,6 +112,7 @@ export default class Dashboard extends Component {
                                     </div>
                                 </Link>
                             </div>
+
 
                         </div>
                     </div>

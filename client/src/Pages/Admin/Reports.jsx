@@ -5,7 +5,7 @@ import Navbar from './Navbar';
 import Sidebar from './Sidebar';
 
 
-export default class Posts extends Component {
+export default class Reports extends Component {
 
     state = {
         reload: false
@@ -15,7 +15,7 @@ export default class Posts extends Component {
     }
 
     fetchData() {
-        axios.get('/api/posts')
+        axios.get('/api/reports')
             .then(res => this.setState({ ...res.data }))
             .catch(e => console.log(e))
     }
@@ -25,7 +25,7 @@ export default class Posts extends Component {
     }
 
     render() {
-        const { posts } = this.state
+        const { reports } = this.state
         console.log(this.state)
         return (
             <div>
@@ -45,33 +45,23 @@ export default class Posts extends Component {
                                 <thead>
                                     <tr>
                                         <th>#</th>
-                                        <th scope="col" className="col-2">Author</th>
+                                        <th scope="col" className="col-2">Reporter</th>
                                         <th scope="col">Post content</th>
-                                        <th scope="col" className="text-center">Reports</th>
-                                        <th scope="col" className="text-center">Reacts</th>
-                                        <th scope="col" className="text-center">Comments</th>
+                                        <th scope="col">Report description</th>
                                         <th scope="col" className="text-center">#</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     {
-                                        posts && posts.map((post, index) => {
+                                        reports && reports.map((report, index) => {
                                             return (
 
                                                 <tr>
                                                     <td>{index + 1}</td>
-                                                    <td> {post.user.name} </td>
-                                                    <td> {post.desc} </td>
-                                                    <td className="text-center">
-                                                        {
-                                                            post.reports.length >= 5 ?
-                                                                <span className="badge rounded-circle bg-danger">{post.reports.length}</span> :
-                                                                <span> {post.reports.length} </span>
-                                                        }
-                                                    </td>
-                                                    <td className="text-center"> {post.reacts.length} </td>
-                                                    <td className="text-center"> {post.comments.length} </td>
-                                                    <td className="text-center"> <Link to={`/posts/${post.id}`} className="btn btn-sm text-decoration-none btn-primary">View</Link></td>
+                                                    <td> {report.user.name} </td>
+                                                    <td> {report.post.desc} </td>
+                                                    <td> {report.desc} </td>
+                                                    <td className="text-center"> <Link to={`/posts/${report.post.id}`} className="btn btn-sm text-decoration-none btn-primary">View Post</Link></td>
                                                 </tr>
                                             )
                                         })

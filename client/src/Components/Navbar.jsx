@@ -4,6 +4,7 @@ import { Modal } from 'react-bootstrap'
 
 import CreatePost from '../Pages/Users/Post/CreatePost';
 import axios from 'axios';
+import ToastBar from './ToastBar';
 
 
 export default class Navbar extends Component {
@@ -23,6 +24,12 @@ export default class Navbar extends Component {
     handleClose = () => {
         this.setState({ modalShow: false })
     }
+
+
+    showToastHandler = (toast) => {
+        if (toast) this.showToast = toast.toastShow
+    }
+
 
     signout() {
         // axios.get('/api/signout')
@@ -92,9 +99,14 @@ export default class Navbar extends Component {
                         <Modal.Title>Create Post</Modal.Title>
                     </Modal.Header>
                     <Modal.Body>
-                        <CreatePost reload={this.props.reload} hideModal={this.handleClose} />
+                        <CreatePost reload={this.props.reload} hideModal={this.handleClose} showToast={this.showToast} />
                     </Modal.Body>
                 </Modal>
+
+
+                <ToastBar
+                    ref={this.showToastHandler}
+                />
             </div>
         )
     }
