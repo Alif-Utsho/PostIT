@@ -9,25 +9,64 @@ class Registration extends Component {
         email: '',
         phone: '',
         password: '',
-        errors: ''
+        errors: {}
     }
 
     onChange = e => {
         this.setState({
             [e.target.name]: e.target.value
         })
-        console.log(this.state)
     }
     handleSubmit = async e => {
-        e.preventDefault();
-        const res = await axios.post('/api/register', this.state);
-        console.log(res);
+        e.preventDefault()
+
+        const { name, phone, email, password } = this.state
+        let errors = {}
+
+        if (!name) {
+            errors["name"] = "Please provide a Name";
+        }
+        if (!phone) {
+            errors["phone"] = "Please provide a Phone";
+        }
+        if (!email) {
+            errors["email"] = "Please provide an Email";
+        }
+        if (!password) {
+            errors["password"] = "Please provide a Password";
+        }
+
+        this.setState({ errors: errors })
+
+
+        if (Object.values(errors).length <= 0) {
+            axios.post('/api/register', this.state)
+                .then(res => {
+                    localStorage.setItem('token', res.data.token.token)
+                    localStorage.setItem('user_id', window.btoa(res.data.token.id))
+                    localStorage.setItem('usertype', window.btoa(res.data.token.type))
+
+                    if (res.data.user.type === 'users') {
+                        window.location.pathname = "/newsfeed"
+                    }
+                })
+                .catch(e => {
+                    let errors = {}
+                    errors["message"] = e.response.data.message
+                    this.setState({ errors: errors })
+                    console.log(e.response.data.message)
+                })
+        }
     }
 
     render() {
+        if (localStorage.getItem('token') && window.atob(localStorage.getItem('usertype')) !== 'users') window.location.pathname = "/newsfeed"
+        else if (localStorage.getItem('token') && window.atob(localStorage.getItem('usertype')) !== 'admin') window.location.pathname = "/dashboard"
+
+        const { errors } = this.state
         return (
             <div>
-                <section className="vh-100 bg-success">
+                <section className="vh-100 bg-success bg-opacity-75">
                     <div className="container h-100">
                         <div className="row d-flex justify-content-center align-items-center h-100">
                             <div className="col-12 col-md-8 col-lg-6 col-xl-5">
@@ -36,27 +75,51 @@ class Registration extends Component {
 
                                         <Link className="alert alert-danger col-12 btn fs-2 fw-bold" to="/" style={{ fontFamily: "Yeseva One" }}>
                                             <i className="fas fa-link"></i>
-                                            PostIT!!
+                                            Postbook!!
                                         </Link>
 
-                                        <h4 className="mt-5 mb-3">Sign up</h4>
+                                        <h4 className="my-3">Sign up</h4>
 
                                         <form onSubmit={this.handleSubmit}>
 
-                                            <div className="form-outline mb-4">
-                                                <input type="text" id="name" name="name" onChange={this.onChange} value={this.state.name} className="form-control form-control-lg" placeholder="Name" />
+                                            <div className="form-outline mb-3">
+                                                <input type="text" id="name" name="name" onChange={this.onChange} value={this.state.name} className={errors.email ? "form-control form-control-lg is-invalid" : "form-control form-control-lg"} placeholder="Name" />
+                                                {
+                                                    errors.name &&
+                                                    <div id="validationServer03Feedback" className="invalid-feedback text-start">
+                                                        {errors.name}
+                                                    </div>
+                                                }
                                             </div>
 
-                                            <div className="form-outline mb-4">
-                                                <input type="text" id="phone" name="phone" onChange={this.onChange} value={this.state.phone} className="form-control form-control-lg" placeholder="Phone" />
+                                            <div className="form-outline mb-3">
+                                                <input type="text" id="phone" name="phone" onChange={this.onChange} value={this.state.phone} className={errors.email ? "form-control form-control-lg is-invalid" : "form-control form-control-lg"} placeholder="Phone" />
+                                                {
+                                                    errors.phone &&
+                                                    <div id="validationServer03Feedback" className="invalid-feedback text-start">
+                                                        {errors.phone}
+                                                    </div>
+                                                }
                                             </div>
 
-                                            <div className="form-outline mb-4">
-                                                <input type="text" id="email" name="email" onChange={this.onChange} value={this.state.email} className="form-control form-control-lg" placeholder="E-mail" />
+                                            <div className="form-outline mb-3">
+                                                <input type="text" id="email" name="email" onChange={this.onChange} value={this.state.email} className={errors.email ? "form-control form-control-lg is-invalid" : "form-control form-control-lg"} placeholder="E-mail" />
+                                                {
+                                                    errors.email &&
+                                                    <div id="validationServer03Feedback" className="invalid-feedback text-start">
+                                                        {errors.email}
+                                                    </div>
+                                                }
                                             </div>
 
-                                            <div className="form-outline mb-4">
-                                                <input type="password" id="password" name="password" onChange={this.onChange} value={this.state.password} className="form-control form-control-lg" placeholder="Password" />
+                                            <div className="form-outline mb-3">
+                                                <input type="password" id="password" name="password" onChange={this.onChange} value={this.state.password} className={errors.email ? "form-control form-control-lg is-invalid" : "form-control form-control-lg"} placeholder="Password" />
+                                                {
+                                                    errors.password &&
+                                                    <div id="validationServer03Feedback" className="invalid-feedback text-start">
+                                                        {errors.password}
+                                                    </div>
+                                                }
                                             </div>
 
 

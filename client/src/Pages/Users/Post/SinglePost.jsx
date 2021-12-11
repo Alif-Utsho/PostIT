@@ -96,12 +96,13 @@ class SinglePost extends Component {
                                             <Post post={post} user={post.user} authId={authId} reload={this.reload.bind(this)} showReact key={post.id} />
                                             {
                                                 reacts && reacts.length > 0 &&
-                                                <div className="ps-3 my-2"> <span onClick={this.reactClick} style={{ cursor: 'pointer' }}> <i className="far fa-heart me-1 text-danger" ></i> {reacts[0].user.name} {reacts.length > 1 && ` and ${reacts.length - 1} others`} loved </span> </div>
+                                                <div className="ps-3 my-2"> <span onClick={this.reactClick} style={{ cursor: 'pointer' }}> <i className="far fa-heart me-1 text-danger" ></i> {reacts[reacts.length-1].user.name} {reacts.length > 1 && ` and ${reacts.length - 1} others`} loved </span> </div>
                                             }
                                         </div>
                                         <hr />
                                         {
                                             authId !== 1 &&
+                                                post.isComment ?
                                             <div className="d-flex justify-content-between shadow-sm">
                                                 <div className={this.state.newComment.trim().length > 0 ? "form-group col-11" : "form-group col-12"}>
                                                     <textarea name="newComment" onChange={this.onchangeHandler} value={this.state.newComment} className="form-control border-0 border-start border-primary rounded-0 rounded-start" id="exampleFormControlTextarea1" rows="2" placeholder="Write a comment"></textarea>
@@ -110,7 +111,8 @@ class SinglePost extends Component {
                                                 <div className={this.state.newComment.trim().length > 0 ? "d-flex col-1" : "d-flex d-none col-1"}>
                                                     <button onClick={this.handleComment} className="btn btn-outline-primary border-0 rounded-0 rounded-end ms-auto col-12"><i className="fas fs-5 fa-paper-plane"></i></button>
                                                 </div>
-                                            </div>
+                                                </div> :
+                                                <div className="py-1 my-3 alert-danger rounded text-center">Commenting off by the author</div>
                                         }
 
                                         <div className="mt-2">

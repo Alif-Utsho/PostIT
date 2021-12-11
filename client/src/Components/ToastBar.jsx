@@ -16,7 +16,7 @@ export default class ToastBar extends Component {
                 <Toast show={this.state.showToast} onClose={() => this.setState({ showToast: false })} delay={5000} autohide={true}>
                     <Toast.Header closeButton={true}>
                         <i className="fas fa-link"></i>&nbsp;
-                        <strong className="me-auto">PostIT!!</strong>
+                        <strong className="me-auto">Postbook!!</strong>
                         <small>Just now</small>
                     </Toast.Header>
                     <Toast.Body>{this.state.message}</Toast.Body>

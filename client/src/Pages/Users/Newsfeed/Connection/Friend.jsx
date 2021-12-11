@@ -43,7 +43,7 @@ export default class Friend extends Component {
                     <div className="d-md-flex justify-content-center">
                         <div className="col-md-4">
                             <h5 className="card-header mx-auto mb-3 border-bottom d-flex border-0 border-primary">Friends <span className="ms-auto">{friends && friends.length}</span> </h5>
-                            <ul className="list-group list-group-flush">
+                            <ul className="list-group list-group-flush overflow-auto" style={{height: "550px"}}>
                                 {
                                     friends ?
                                         ((friends && friends.length > 0) ?
@@ -79,7 +79,7 @@ export default class Friend extends Component {
                                 </div>
                                 {
                                     request &&
-                                    <ul className="list-group list-group-flush px-1" style={{ height: '475px' }}>
+                                    <ul className="list-group list-group-flush px-1 overflow-auto" style={{ height: '500px' }}>
                                         {
                                             request.length > 0 ?
                                                 request.map(req => <Request request={req} key={req.id} reload={this.reload.bind(this)} />) :

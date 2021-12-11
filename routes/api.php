@@ -41,6 +41,8 @@ Route::put('/deletepost', [PostController::class, 'deletePost']);
 Route::put('/editpost', [PostController::class, 'editPost']);
 Route::get('/post/{id}', [PostController::class, 'singlePost']);
 Route::get('/postofuser/{id}', [PostController::class, 'postofuser']);
+Route::put('/commentoff', [PostController::class, 'commentoff']);
+Route::put('/commenton', [PostController::class, 'commenton']);
 
 // Connection routes
 Route::get('/users', [ConnectionController::class, 'users']);

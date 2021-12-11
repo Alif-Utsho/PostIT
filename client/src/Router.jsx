@@ -26,12 +26,11 @@ function Router() {
         // Do something before request is sent
         //if (!localStorage.getItem('token') && window.location.pathname !== "/login" && window.location.pathname !== "/register") window.location.pathname = "/login"
         
-        console.log(window.location.pathname)
-        
         switch (window.location.pathname) {
             case "/login":
             case "/registration":
-                if (localStorage.getItem('token')) window.location.pathname = "/newsfeed"
+                if (localStorage.getItem('token') && window.atob(localStorage.getItem('usertype')) !== 'users') window.location.pathname = "/newsfeed"
+                else if (localStorage.getItem('token') && window.atob(localStorage.getItem('usertype')) !== 'admin') window.location.pathname = "/dashboard"
                 else return config;
                 break;
             
@@ -39,7 +38,8 @@ function Router() {
             case "/friend":
             case "/findfriend":
             case "/profile":
-                if (!localStorage.getItem('token')) window.location.pathname = "/login"
+                if (!localStorage.getItem('token') && window.atob(localStorage.getItem('usertype')) !== 'users') window.location.pathname = "/login"
+                else if (window.atob(localStorage.getItem('usertype')) === 'admin') window.location.pathname = "/dashboard"
                 else return config;
                 break;
             
@@ -48,7 +48,8 @@ function Router() {
             case "/comments":
             case "/posts":
             case "/reacts":
-                if (!localStorage.getItem('token')) window.location.pathname = "/login"
+                if (!localStorage.getItem('token') && window.atob(localStorage.getItem('usertype')) !== 'admin') window.location.pathname = "/login"
+                else if (window.atob(localStorage.getItem('usertype')) === 'users') window.location.pathname = "/newsfeed"
                 else return config;
                 break;
                 

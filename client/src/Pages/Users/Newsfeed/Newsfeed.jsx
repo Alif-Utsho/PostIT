@@ -11,11 +11,9 @@ class Newsfeed extends Component {
         reload: false
     }
 
+    
+
     componentDidMount() {
-        let token = localStorage.getItem('token')
-        if (!token) {
-            window.location.pathname = "/login"
-        }
         this.fetchData()
     }
 
@@ -72,14 +70,15 @@ class Newsfeed extends Component {
 
                             {
                                 posts ?
-                                    posts.length > 0 ?
+                                    posts.filter(post => friendList.includes(post.user.id)).length > 0 ?
                                         posts
                                             .filter(post => friendList.includes(post.user.id))
                                             .map(post => {
                                                 return <Post post={post} user={post.user} authId={authId} reload={this.reload.bind(this)} key={post.id} />
                                             }) :
-                                        <div className="d-flex justify-content-center mt-5 py-4 alert alert-danger">
-                                            <h3>No post yet</h3>
+                                        <div className="mt-5 py-4 alert alert-danger">
+                                            <h3 className="text-center">No post yet</h3>
+                                            <h5 className="text-center">Make more friends to see post</h5>
                                         </div>
                                     :
                                     <div className="d-flex justify-content-center mt-5 py-3">
@@ -100,7 +99,7 @@ class Newsfeed extends Component {
                             </div>
                             {
                                 request &&
-                                <ul className="list-group list-group-flush px-1" style={{ height: '475px' }}>
+                                <ul className="list-group list-group-flush px-1 overflow-auto" style={{ height: '475px' }}>
                                     {
                                         request.length > 0 ?
                                             request.map(req => <Request request={req} key={req.id} reload={this.reload.bind(this)} />) :

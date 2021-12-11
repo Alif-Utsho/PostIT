@@ -6,7 +6,6 @@ class Login extends Component {
     state = {
         email: '',
         password: '',
-        hasError: false,
         errors: {}
     }
 
@@ -23,11 +22,9 @@ class Login extends Component {
         let errors = {}
 
         if (!email) {
-            this.setState({ hasError: true })
-            errors["email"] = "Please provide an Email";
+            errors["email"] = "Please provide an E-mail";
         }
         if (!password) {
-            this.setState({ hasError: true })
             errors["password"] = "Please provide a Password";
         }
 
@@ -35,12 +32,13 @@ class Login extends Component {
 
 
 
-        if (!this.state.hasError) {
+        if (Object.values(errors).length<=0) {
             axios.post('/api/login', this.state)
                 .then(res => {
                     localStorage.setItem('token', res.data.token.token)
+                    localStorage.setItem('user_id', window.btoa(res.data.token.id))
+                    localStorage.setItem('usertype', window.btoa(res.data.token.type))
 
-                    console.log(res.data)
                     if (res.data.user.type === 'admin') {
                         window.location.pathname = "/dashboard"
                     }
@@ -48,14 +46,21 @@ class Login extends Component {
                         window.location.pathname = "/newsfeed"
                     }
                 })
-                .catch(e => console.log(e))
+                .catch(e => {
+                    let errors = {}
+                    errors["message"] = e.response.data.message
+                    this.setState({ errors: errors})
+                })
         }
     }
     render() {
+        if (localStorage.getItem('token') && window.atob(localStorage.getItem('usertype')) !== 'users') window.location.pathname = "/newsfeed"
+        else if (localStorage.getItem('token') && window.atob(localStorage.getItem('usertype')) !== 'admin') window.location.pathname = "/dashboard"
+
         const { errors } = this.state
         return (
             <div>
-                <section className="vh-100 bg-success">
+                <section className="vh-100 bg-primary">
                     <div className="container py-5 h-100">
                         <div className="row d-flex justify-content-center align-items-center h-100">
                             <div className="col-12 col-md-8 col-lg-6 col-xl-5">
@@ -64,10 +69,16 @@ class Login extends Component {
 
 
                                         <Link className="alert alert-danger col-12 btn fs-2 fw-bold" to="/" style={{ fontFamily: "Yeseva One" }}>
-                                            <i className="fas fa-link"></i> PostIT!!
+                                            <i className="fas fa-link"></i> Postbook!!
                                         </Link>
 
-                                        <h4 className="mt-3 mb-3">Sign in</h4>
+                                        <h4 className="my-3">Sign in</h4>
+                                        {
+                                            errors.message &&
+                                            <div className="py-2 alert border-danger border-1">
+                                                <h6 className="text-center text-danger my-auto">{errors.message}</h6>
+                                            </div>
+                                        }
 
                                         <form onSubmit={this.handleSubmit}>
 

@@ -118,6 +118,28 @@ class PostController extends Controller
                 'message'=> 'Post deleted successfully'
             ]);
         }
+    }
+
+    public function commentoff(Request $req){
+        $post = Post::find($req->id);
+        $post->isComment = false;
         
+        if($post->save()){
+            return response()->json([
+                'message'=> "The post won't take any comment"
+            ], 200);
+        }
+        
+    }
+
+    public function commenton(Request $req){
+        $post = Post::find($req->id);
+        $post->isComment = true;
+
+        if($post->save()){
+            return response()->json([
+                'message'=> "The post start taking comment"
+            ], 200);
+        }
     }
 }

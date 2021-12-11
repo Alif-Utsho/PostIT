@@ -35,35 +35,41 @@ class AuthController extends Controller
             }
             else{
                 return response()->json([
-                    'message' => "Invalid credential"
+                    'message' => "Password doesn't matched"
                 ], 401);
             }
         }
         else{
             return response()->json([
                 'message' => "User not found"
-            ], 402);
+            ], 401);
         }
 
     }
 
     public function register(Request $req){
-        $var = new User();
-        $var->name = $req->name;
-        $var->phone = $req->phone;
-        $var->email = $req->email;
-        $var->password = Hash::make($req->password);
-        if($var->save()){
+        $user = new User();
+        $user->name = $req->name;
+        $user->phone = $req->phone;
+        $user->email = $req->email;
+        $user->password = Hash::make($req->password);
+        if($user->save()){
+
+            $token = new Token();
+            $token->user_id = $user->id;
+            $token->type = "users";
+            $token->token = Str::random(64);
+            $token->save();
+
             return response()->json([
-                'status' => 200,
-                'message' => 'User registered'
-            ]);
+                'message' => 'User registered',
+                'token' => $token
+            ], 200);
         }
         else{
             return response()->json([
-                'status' => 504,
-                'message' => 'User can\'t registered'
-            ]);
+                'message' => 'Server problem occured'
+            ], 501);
         }
 
 

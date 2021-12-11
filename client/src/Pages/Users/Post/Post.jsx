@@ -77,7 +77,24 @@ export default class Post extends Component {
         this.setState({ newPost: '' })
     }
 
+    commentOff = post_id => {
+        console.log(post_id)
+        axios.put('/api/commentoff', { id: post_id })
+            .then(res => {
+                this.props.reload()
+                this.showToast(res.data.message)
+            })
+            .catch(e => console.log(e))
+    }
 
+    commentOn = post_id => {
+        axios.put('/api/commenton', { id: post_id })
+            .then(res => {
+                this.props.reload()
+                this.showToast(res.data.message)
+            })
+            .catch(e => console.log(e))
+    }
 
     modalShowHandler = (editPost) => {
         if (editPost) this.showModaledit = editPost.handleEditShow
@@ -165,7 +182,17 @@ export default class Post extends Component {
                                         <div>
                                             {
                                                 authId !== 1 &&
-                                                <li><button className="dropdown-item" onClick={this.editClick}><i className="fas fa-pen"></i>  Edit post</button></li>
+                                                <div>
+
+                                                    <li><button className="dropdown-item" onClick={this.editClick}><i className="fas fa-pen"></i>  Edit post</button></li>
+                                                    {
+                                                        post.isComment ?
+                                                            <li><button className="dropdown-item" onClick={() => this.commentOff(post.id)}><i className="fas fa-comment-slash"></i>  Turn off commenting</button></li> :
+                                                            <li><button className="dropdown-item" onClick={() => this.commentOn(post.id)}><i className="far fa-comment-alt"></i>  Turn on commenting</button></li>
+
+                                                    }
+                                                </div>
+
                                             }
 
                                             <li><button onClick={() => this.deletePost(post.id)} className="dropdown-item text-danger"><i className="fas fa-trash-alt"></i> Delete post</button></li>
@@ -176,10 +203,10 @@ export default class Post extends Component {
                                                     post.reports.filter(report => report.user_id === authId).length > 0 ?
                                                     <li className="dropdown-item"> You have already reported to this post </li> :
                                                     <li><button className="dropdown-item" onClick={this.reportClick}><i className="fas fa-bug"></i> Report to admin</button></li>
-                                                    
+
                                             }
                                         </div>
-                                    }
+                                }
                             </ul>
                         </div>
 
@@ -237,12 +264,20 @@ export default class Post extends Component {
                         authId !== 1 &&
                         <div className="d-flex col-md-10 mx-auto justify-content-between">
                             <div className={this.state.liked ? "btn btn-sm text-danger fw-bold" : "btn btn-sm"} onClick={this.likeClick}><i className={this.state.liked ? "fas fa-heart me-1" : "far fa-heart me-1"} ></i>Love</div>
-                            <div className="btn btn-sm">
+                            {
+                                post.isComment ?
+                                    <div className="btn btn-sm">
 
-                                <Link to={`/posts/${post.id}`} className="text-decoration-none text-dark">
-                                    <i className="far fa-comment-alt me-1"></i>Comment
-                                </Link>
-                            </div>
+                                        <Link to={`/posts/${post.id}`} className="text-decoration-none text-dark">
+                                            <i className="far fa-comment-alt me-1"></i>Comment
+                                        </Link>
+                                    </div> :
+                                    <div className="btn btn-sm">
+                                        <Link to={`/posts/${post.id}`} className="text-decoration-none text-dark">
+                                            <i className="fas fa-comment-slash me-1"></i>Comment off
+                                        </Link>
+                                    </div>
+                            }
                             <div className="btn btn-sm"><i className="far fa-share-square me-1"></i>Share</div>
                         </div>
                     }

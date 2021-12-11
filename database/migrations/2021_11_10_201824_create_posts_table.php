@@ -17,6 +17,7 @@ class CreatePostsTable extends Migration
             $table->id()->autoIncrement();
             $table->integer('user_id');
             $table->string('desc');
+            $table->boolean('isComment')->default(true);
             $table->timestamps();
         });
     }

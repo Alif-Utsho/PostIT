@@ -71,7 +71,11 @@ export default class Posts extends Component {
                                                     </td>
                                                     <td className="text-center"> {post.reacts.length} </td>
                                                     <td className="text-center"> {post.comments.length} </td>
-                                                    <td className="text-center"> <Link to={`/posts/${post.id}`} className="btn btn-sm text-decoration-none btn-primary">View</Link></td>
+                                                    <td className="text-center">
+                                                        <Link to={`/posts/${post.id}`} className="btn btn-sm text-decoration-none btn-primary">
+                                                            View
+                                                        </Link>
+                                                    </td>
                                                 </tr>
                                             )
                                         })
