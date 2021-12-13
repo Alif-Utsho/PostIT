@@ -19,7 +19,7 @@ export default class ToastBar extends Component {
                         <strong className="me-auto">Postbook!!</strong>
                         <small>Just now</small>
                     </Toast.Header>
-                    <Toast.Body>{this.state.message}</Toast.Body>
+                    <Toast.Body className="border-0 border border-primary border-bottom rounded-bottom border-2 text-black">{this.state.message}</Toast.Body>
                 </Toast>
             </ToastContainer>
         )

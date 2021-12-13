@@ -83,7 +83,7 @@ export default class EditProfile extends Component {
                             </div>
                             <div className="mb-3">
                                 <label htmlFor="bio" className="form-label">Bio</label>
-                                <input type="bio" name="bio" value={bio} onChange={this.onchangeHandle} placeholder="Describe yourself within 101 letters" className="form-control" />
+                                <input type="bio" name="bio" value={bio || ''} onChange={this.onchangeHandle} placeholder="Describe yourself within 101 letters" className="form-control" />
                                 {bio && bio.length > 101 && <div id="emailHelp" className="form-text text-danger">Bio length should be less than 101</div>}
                             </div>
                             <div>
@@ -92,19 +92,19 @@ export default class EditProfile extends Component {
                                 </div>
                                 <div className="input-group mb-3">
                                     <span className="input-group-text p-2 fs-3 py-0 bg-transparent" id="basic-addon1"><i className="fab fa-facebook-square text-primary"></i></span>
-                                    <input type="text" name="fb" value={fb} onChange={this.onchangeHandle} className="form-control" placeholder="facebook.com/example" aria-label="Username" aria-describedby="basic-addon1" />
+                                    <input type="text" name="fb" value={fb || ''} onChange={this.onchangeHandle} className="form-control" placeholder="facebook.com/example" aria-label="Username" aria-describedby="basic-addon1" />
                                 </div>
                                 <div className="input-group mb-3">
                                     <span className="input-group-text p-2 fs-3 py-0 bg-transparent" id="basic-addon1"><i className="fab fa-instagram-square text-danger"></i></span>
-                                    <input type="text" name="instagram" value={instagram} onChange={this.onchangeHandle} className="form-control" placeholder="instagram.com/example" aria-label="Username" aria-describedby="basic-addon1" />
+                                    <input type="text" name="instagram" value={instagram || ''} onChange={this.onchangeHandle} className="form-control" placeholder="instagram.com/example" aria-label="Username" aria-describedby="basic-addon1" />
                                 </div>
                                 <div className="input-group mb-3">
                                     <span className="input-group-text p-2 fs-3 py-0 bg-transparent" id="basic-addon1"><i className="fab fa-linkedin text-primary"></i></span>
-                                    <input type="text" name="linkedin" value={linkedin} onChange={this.onchangeHandle} className="form-control" placeholder="linkedin.com/example" aria-label="Username" aria-describedby="basic-addon1" />
+                                    <input type="text" name="linkedin" value={linkedin || ''} onChange={this.onchangeHandle} className="form-control" placeholder="linkedin.com/example" aria-label="Username" aria-describedby="basic-addon1" />
                                 </div>
                                 <div className="input-group mb-3">
                                     <span className="input-group-text p-2 fs-3 py-0 bg-transparent" id="basic-addon1"><i className="fab fa-github-square text-dark"></i></span>
-                                    <input type="text" name="github" value={github} onChange={this.onchangeHandle} className="form-control" placeholder="github.com/example" aria-label="Username" aria-describedby="basic-addon1" />
+                                    <input type="text" name="github" value={github || ''} onChange={this.onchangeHandle} className="form-control" placeholder="github.com/example" aria-label="Username" aria-describedby="basic-addon1" />
                                 </div>
                             </div>
                         </form>
@@ -115,7 +115,7 @@ export default class EditProfile extends Component {
                         </Button>
                         <Button variant="primary"
                             onClick={this.handleSubmit}
-                            disabled={bio && bio.length > 101}
+                            disabled={(bio && bio.length > 101) || name.length<=0}
                         >
                             Save Changes
                         </Button>

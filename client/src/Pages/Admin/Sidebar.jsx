@@ -1,11 +1,11 @@
 import axios from 'axios';
-import React, { Component } from 'react';
-import { NavLink as Link } from 'react-router-dom';
+import React from 'react';
+import { Link } from 'react-router-dom';
 
 
-class Sidebar extends Component {
+function Sidebar() {
 
-    signout() {
+    function signout() {
         axios.put('/api/signout')
             .then(res => {
                 localStorage.clear()
@@ -14,7 +14,6 @@ class Sidebar extends Component {
             .catch(e => console.log(e))
     }
 
-    render() {
         return (
             <div className="bg-dark vh-100">
                 <span className="d-flex align-items-center mb-3 p-2 border-bottom">
@@ -57,7 +56,7 @@ class Sidebar extends Component {
                         </button>
                         <div className="collapse ms-5" id="account-collapse">
                             <ul className="btn-toggle-nav list-unstyled fw-normal pb-1">
-                                <li><span onClick={this.signout} className="link-dark rounded text-danger text-decoration-none" style={{ cursor: 'pointer' }}>Sign out</span></li>
+                                <li><span onClick={signout} className="link-dark rounded text-danger text-decoration-none" style={{ cursor: 'pointer' }}>Sign out</span></li>
                             </ul>
                         </div>
                     </li>
@@ -65,6 +64,5 @@ class Sidebar extends Component {
             </div>
         );
     }
-}
 
 export default Sidebar;

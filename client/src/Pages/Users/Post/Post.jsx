@@ -297,6 +297,7 @@ export default class Post extends Component {
                     editPost={this.editPost}
                     ref={this.reportModalShowHandler}
                     reload={this.props.reload}
+                    showToast={this.showToast}
                     key={`report${post.id}`}
                 />
 
