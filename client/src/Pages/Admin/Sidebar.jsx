@@ -1,5 +1,4 @@
 import axios from 'axios';
-import React from 'react';
 import { Link } from 'react-router-dom';
 
 
@@ -18,32 +17,32 @@ function Sidebar() {
             <div className="bg-dark vh-100">
                 <span className="d-flex align-items-center mb-3 p-2 border-bottom">
                     <span className="fs-5 fw-bold btn col-12 text-white">
-                        <i className="fas fa-link"></i> PostIT
+                        <i className="fas fa-link"></i> Postbook
                     </span>
                 </span>
 
                 <ul className="list-unstyled ps-0 ms-4">
                     <li className="mb-1">
-                        <Link className="btn align-items-center rounded text-white" to="/dashboard">
+                        <Link to="/dashboard" className="btn rounded text-white">
                             <i className="fas fa-tachometer-alt"></i> &nbsp;
                             Dashboard
                         </Link>
                     </li>
                     <li className="mb-1">
-                        <Link to="/users" className="btn link-dark rounded text-white text-decoration-none">
+                        <Link to="/users" className="btn rounded text-white">
                             <i className="fas fa-users"></i> &nbsp;
                             Users
                         </Link>
                     </li>
                     <li className="mb-1">
-                        <Link to="/posts" className="btn link-dark rounded text-white text-decoration-none">
+                        <Link to="/posts" className="btn rounded text-white">
                             <i className="fas fa-copy"></i> &nbsp;
                             Posts
                         </Link>
                     </li>
 
                     <li className="mb-1">
-                        <Link to="/reports" className="btn link-dark rounded text-white text-decoration-none">
+                        <Link to="/reports" className="btn rounded text-white">
                             <i className="fas fa-file-alt"></i> &nbsp;
                             Reports
                         </Link>

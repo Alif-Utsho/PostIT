@@ -190,7 +190,7 @@ export default class AuthProfile extends Component {
 
                             {/* Edit profile modal */}
                             <EditProfile user={user} updateProfile={this.updateProfile} ref={this.modalShowHandler} key={user.id} />
-                            {sent && <Sent sent={sent} />}
+                            {sent && <Sent sent={sent} reload={this.reload.bind(this)}  />}
 
                             <div className="col-md-5 overflow-auto" style={{ height: "650px" }}>
                                 <div className="col-12 col-lg-11 mx-auto mt-3">

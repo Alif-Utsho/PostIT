@@ -35,7 +35,7 @@ class Newsfeed extends Component {
 
         axios.get('/api/posts')
             .then(res => {
-                this.setState({ ...res.data });
+                this.setState({ ...res.data })
             })
             .catch(e => console.log(e))
     }

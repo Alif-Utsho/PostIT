@@ -278,7 +278,15 @@ export default class Post extends Component {
                                         </Link>
                                     </div>
                             }
-                            <div className="btn btn-sm"><i className="far fa-share-square me-1"></i>Share</div>
+                            <div className="btn btn-sm">
+                                <div onClick={() => {
+                                    navigator.clipboard.writeText(`${window.location.host}/posts/${post.id}`)
+                                    this.showToast("Post link copied to your clipboard.")
+                                }
+                                }>
+                                    <i className="far fa-share-square me-1"></i>Share
+                                </div>
+                            </div>
                         </div>
                     }
                 </div>
